@@ -16,7 +16,7 @@ const password = ref('')
      
       <v-row
   class="justify-space-between align-center"
-  style="background-color: white; height: 40px; width: 100%; margin-bottom: 5px;"
+  style="background-color: white; height: 50px; width: 100%; margin-bottom: 5px;"
 >
   <!-- Optional: Add logo or nav content here -->
 </v-row>
@@ -35,7 +35,7 @@ const password = ref('')
 
         <!-- Right Side: Login Form -->
         <v-col cols="12" md="6" class="d-flex align-center justify-center" style="background-color: #dfeaf3;">
-          <v-card flat class="pa-6" width="350" style="margin-bottom: 22px;">
+          <v-card flat class="pa-6" width="350" style="margin-bottom: 33px;">
             <v-text-field v-model="firstname" label="First Name" outlined />
             <v-text-field v-model="lastname" label="Last Name" outlined />
             <v-text-field v-model="username" label="Create Username" outlined />
@@ -48,7 +48,7 @@ const password = ref('')
       <!-- Footer -->
       <v-row 
   class="justify-center align-center"
-  style="background-color: white; height: 45px; width: 100%; margin-top: 10px; font-family: Poppins, sans-serif"
+  style="background-color: white; height: 60px; width: 100%; margin-top: 10px; font-family: Poppins, sans-serif"
 >   © 2025 - Aquatech
 </v-row>
     </v-container>
