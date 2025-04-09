@@ -13,7 +13,7 @@ const password = ref('')
      
       <v-row
   class="justify-space-between align-center"
-  style="background-color: #dfeaf3; height: .30cm; width: 100%; margin: 0;"
+  style="background-color: white; height: -100px; width: 100%; margin-bottom: 30px;"
 >
   <!-- Optional: Add logo or nav content here -->
 </v-row>
@@ -22,10 +22,10 @@ const password = ref('')
       <!-- Main Content -->
       <v-row class="flex-grow-1">
         <!-- Left Side: Image and Logo -->
-        <v-col cols="12" md="6" class="d-flex align-center justify-center pa-10" style="background: url('/background.jpg'); background-size: cover;">
+        <v-col cols="12" md="6" class="d-flex align-center justify-center pa-10" style= "background-size: cover;">
           <div class="text-center">
-            <v-img src="/bottle-phone.png" max-width="300" class="mx-auto mb-4" />
-            <h1 class="font-weight-bold" style="font-size: 3rem;">
+            <v-img src="/src\assets\logo-aquatech.png" max-width="300" class="mx-auto mb-4" style="border-radius: 10%;" />
+            <br><h1 class="font-weight-bold" style="font-size: 3rem;">
               <span style="color:#5dade2">Aqua</span><span style="color:#333">tech</span>
             </h1>
           </div>
@@ -51,12 +51,12 @@ const password = ref('')
         </v-col>
       </v-row>
 
-      <!-- Footer -->
-      <v-row
+      <v-row 
   class="justify-center align-center"
-  style="background-color: #dfeaf3; height: .30cm; width: 100%; margin: 0;"
->
+  style="background-color: white; height: -20px; width: 100%; margin-top: 48px; font-family: Poppins, sans-serif"
+>   © 2025 - Aquatech
 </v-row>
+
     </v-container>
   </v-app>
 </v-responsive>
