@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import logo from '@/assets/logo-aquatech.jpg'
 
 const firstname = ref('')
 const lastname = ref('')
@@ -25,7 +26,7 @@ const password = ref('')
         <!-- Left Side: Image and Logo -->
         <v-col cols="12" md="6" class="d-flex align-center justify-center pa-10" style="background: url('/background.jpg'); background-size: cover;">
           <div class="text-center">
-            <v-img src="/src\assets\logo-aquatech.jpg" max-width={300} class="mx-auto mb-4" style="border-radius: 10%;"/>
+            <v-img :src="logo" max-width="300" class="mx-auto mb-4" style="border-radius: 10%;" />
             <h1 class="font-weight-bold" style="font-size: 3rem;">
               <span style="color:#5dade2">Aqua</span><span style="color:#333">tech</span>
             </h1>
