@@ -16,7 +16,7 @@ const password = ref('')
      
       <v-row
   class="justify-space-between align-center"
-  style="background-color: white; height: 30px; width: 100%; margin-bottom: 5px;"
+  style="background-color: white; height: 40px; width: 100%; margin-bottom: 5px;"
 >
   <!-- Optional: Add logo or nav content here -->
 </v-row>
