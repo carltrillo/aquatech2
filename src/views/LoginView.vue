@@ -13,7 +13,7 @@ const password = ref('')
      
       <v-row
   class="justify-space-between align-center"
-  style="background-color: white; height: -100px; width: 100%; margin-bottom: 30px;"
+  style="background-color: white; height: -100px; width: 100%; margin-bottom: 5px;"
 >
   <!-- Optional: Add logo or nav content here -->
 </v-row>
@@ -24,7 +24,7 @@ const password = ref('')
         <!-- Left Side: Image and Logo -->
         <v-col cols="12" md="6" class="d-flex align-center justify-center pa-10" style= "background-size: cover;">
           <div class="text-center">
-            <v-img src="/src\assets\logo-aquatech.png" max-width="300" class="mx-auto mb-4" style="border-radius: 10%;" />
+            <v-img src="/src\assets\logo-aquatech.jpg" max-width="300" class="mx-auto mb-4" style="border-radius: 10%;" />
             <br><h1 class="font-weight-bold" style="font-size: 3rem;">
               <span style="color:#5dade2">Aqua</span><span style="color:#333">tech</span>
             </h1>
