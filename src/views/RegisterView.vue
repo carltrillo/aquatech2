@@ -28,7 +28,7 @@ const password = ref('')
           <div class="text-center">
             <v-img :src="logo" max-width="300" class="mx-auto mb-4" style="border-radius: 10%;" />
             <h1 class="font-weight-bold" style="font-size: 3rem;">
-              <span style="color:#5dade2; font-family: Trebuchet MS">Aqua</span><span style="color:#333; font-family: Trebuchet MS">tech</span>
+              <span style="color:#5dade2; font-family: Trebuchet MS, Arial, sans-serif;">Aqua</span><span style="color:#333; font-family: Trebuchet MS, Arial, sans-serif;">tech</span>
             </h1>
           </div>
         </v-col>
