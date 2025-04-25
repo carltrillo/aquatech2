@@ -1,20 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 
-const email = ref('')
+const user = ref('')
 const password = ref('')
+const showPassword = ref(false)
 
-const login = () => {
-  alert(`Logging in as ${email.value}`)
-}
-
-const loginWithGoogle = () => {
-  alert('Redirecting to Google login...')
-}
-
-const signUp = () => {
-  alert('Redirect to sign-up page')
-}
+const login = () => {}
 </script>
 
 <template>
@@ -35,10 +26,12 @@ const signUp = () => {
               <v-text-field
                 label="Password"
                 v-model="password"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
                 dense
                 outlined
                 required
+                :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append-inner="showPassword = !showPassword"
               />
 
               <v-btn type="submit" color="blue-darken-1" block class="mb-3 text-white" height="48">
@@ -62,7 +55,7 @@ const signUp = () => {
                 color="blue"
                 size="small"
                 class="text-caption font-weight-medium"
-                @click="signUp"
+                to="/register"
               >
                 Sign Up
               </v-btn>
