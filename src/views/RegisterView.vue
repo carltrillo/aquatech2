@@ -35,7 +35,7 @@ const register = () => {
               <v-text-field
                 label="Password"
                 v-model="password"
-                type="password"
+                type="text"
                 dense
                 outlined
                 required
