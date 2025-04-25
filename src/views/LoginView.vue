@@ -1,70 +1,89 @@
 <script setup>
 import { ref } from 'vue'
-import logo from '@/assets/logo-aquatech.jpg'
 
-const username = ref('')
+const email = ref('')
 const password = ref('')
 
+const login = () => {
+  alert(`Logging in as ${email.value}`)
+}
+
+const loginWithGoogle = () => {
+  alert('Redirecting to Google login...')
+}
+
+const signUp = () => {
+  alert('Redirect to sign-up page')
+}
 </script>
 
 <template>
   <v-responsive>
-  <v-app>
-    <v-container fluid class="d-flex flex-column fill-height pa-0" style="background-color: #dfeaf3;">
-     
-      <v-row
-  class="justify-space-between align-center"
-  style="background-color: white; height: 60px; width: 100%; margin-bottom: 5px;"
->
-  <!-- Optional: Add logo or nav content here -->
-</v-row>
+    <v-container class="fill-height d-flex justify-center align-center pa-4 login-bg" fluid>
+      <v-row class="justify-center align-center" style="min-height: 100vh">
+        <v-col cols="12" sm="10" md="6" lg="4">
+          <v-card class="pa-6 rounded-xl" elevation="2">
+            <v-card-title class="text-h5 text-center font-weight-bold">Login</v-card-title>
 
+            <v-card-subtitle class="text-center mb-4 text-body-2">
+              Enter your account to access
+            </v-card-subtitle>
 
-      <!-- Main Content -->
-      <v-row class="flex-grow-1">
-        <!-- Left Side: Image and Logo -->
-        <v-col cols="12" md="6" class="d-flex align-center justify-center pa-10" style= "background-size: cover;">
-          <div class="text-center">
-            <v-img :src="logo" max-width="300" class="mx-auto mb-4" style="border-radius: 10%;" />
-            <br><h1 class="font-weight-bold" style="font-size: 3rem;">
-              <span style="color:#5dade2; font-family: Trebuchet MS, Arial, sans-serif;">Aqua</span><span style="color:#333; font-family: Trebuchet MS, Arial, sans-serif;">tech</span>
-            </h1>
-          </div>
-        </v-col>
+            <v-form @submit.prevent="login">
+              <v-text-field label="Username" v-model="user" type="text" dense outlined required />
 
-        <!-- Right Side: Login Form -->
-        <v-col cols="12" md="6" class="d-flex align-center justify-center" style="background-color: #dfeaf3;">
-          <v-card flat class="pa-6" width="350" style="margin-bottom: 30px;">
-            <v-text-field v-model="username" label="Username" outlined />
-            <v-text-field v-model="password" label="Password" type="password" outlined />
-            <v-btn color="blue" block class="mt-4">Login</v-btn>
-            <v-btn
-  color="green"
-  block
-  class="mt-4"
-  :to="{ path: '/register' }"
-  tag="RouterLink"
->
-  Register
-</v-btn>
+              <v-text-field
+                label="Password"
+                v-model="password"
+                type="password"
+                dense
+                outlined
+                required
+              />
 
+              <v-btn type="submit" color="blue-darken-1" block class="mb-3 text-white" height="48">
+                Login
+              </v-btn>
+            </v-form>
+
+            <v-btn color="white" block class="mb-3 text-black" height="48" @click="loginWithGoogle">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Google-g-icon.png"
+                alt="Google Logo"
+                style="width: 30px; height: 30px; margin-right: 10px"
+              />
+              Login with Google
+            </v-btn>
+
+            <div class="mt-5 text-center text-body-2">
+              Don't have an account?
+              <v-btn
+                variant="text"
+                color="blue"
+                size="small"
+                class="text-caption font-weight-medium"
+                @click="signUp"
+              >
+                Sign Up
+              </v-btn>
+            </div>
           </v-card>
         </v-col>
       </v-row>
-
-      <v-row 
-  class="justify-center align-center"
-  style="background-color: white; height: 60px; width: 100%; margin-top: 25px;"
->    © 2025 - Aquatech
-</v-row>
-
     </v-container>
-  </v-app>
-</v-responsive>
+  </v-responsive>
 </template>
 
 <style scoped>
-.fill-height {
-  height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+.login-bg {
+  background: url('/src\assets\bg-water.jpg') no-repeat center center;
+  background-size: cover;
 }
 </style>

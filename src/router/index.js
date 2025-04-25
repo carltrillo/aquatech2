@@ -8,14 +8,14 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: LoginView
+      component: LoginView,
     },
     {
-      path: '/register',
+      path: '/',
       name: 'register',
-      component: RegisterView
-    } 
-  ]
+      component: RegisterView,
+    },
+  ],
 })
 
 export default router
