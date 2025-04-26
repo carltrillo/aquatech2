@@ -26,33 +26,66 @@ function changePass() {
     <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
       <v-row class="justify-center align-start" style="min-height: 100vh">
         <!-- Sidebar (unchanged) -->
-        <v-col cols="12" md="3">
-          <v-card class="pa-4 rounded-xl fill-height dashboard-bg" elevation="2">
-            <v-list nav dense>
-              <v-list-item-title class="text-h6 mb-2">Aquatech</v-list-item-title>
-              <v-divider class="mb-2"></v-divider>
-              <v-list-item to="/customer_dashboard" prepend-icon="mdi-view-dashboard"
-                >Dashboard</v-list-item
-              >
-              <v-divider class="mb-2"></v-divider>
-              <v-list-item to="/promo_dashboard" prepend-icon="mdi-sale">Promos</v-list-item>
-              <v-divider class="mb-2"></v-divider>
-              <v-list-item to="/history_dashboard" prepend-icon="mdi-history"
-                >Purchase History</v-list-item
-              >
-              <v-divider class="mb-2"></v-divider>
-              <v-list-item to="#" prepend-icon="mdi-account-circle">Profile</v-list-item>
-              <v-divider class="mb-2"></v-divider>
-              <v-spacer class="my-15"></v-spacer>
+        <v-col>
+          <v-list
+            style="min-height: 97vh; background-color: lightblue"
+            class="sidebar-border"
+            nav
+            dense
+            fluid
+          >
+            <v-list-item
+              style="background-color: white"
+              prepend-icon="mdi-view-dashboard"
+              class="text-h4"
+              >Aquatech</v-list-item
+            >
 
-              <v-list-item prepend-icon="mdi-logout" @click="dialog2 = true">Sign out</v-list-item>
-            </v-list>
-          </v-card>
+            <v-list-item
+              to="/customer_dashboard"
+              class="mt-4"
+              style="background-color: white"
+              prepend-icon="mdi-view-dashboard"
+              >Dashboard</v-list-item
+            >
+
+            <v-list-item
+              to="/promo_dashboard"
+              class="mt-2"
+              style="background-color: white"
+              prepend-icon="mdi-sale"
+              >Promos</v-list-item
+            >
+
+            <v-list-item
+              to="/history_dashboard"
+              class="mt-2"
+              style="background-color: white"
+              prepend-icon="mdi-history"
+              >Purchase History</v-list-item
+            >
+
+            <v-list-item
+              to="#"
+              class="mt-2"
+              style="background-color: white"
+              prepend-icon="mdi-account-circle"
+              >Profile</v-list-item
+            >
+
+            <v-list-item
+              style="background-color: white"
+              class="mt-2"
+              prepend-icon="mdi-logout"
+              @click="dialog2 = true"
+              >Sign out</v-list-item
+            >
+          </v-list>
         </v-col>
 
         <!-- Main Content -->
         <v-col cols="12" md="9">
-          <v-row class="mb-4">
+          <v-row class="mb-3">
             <v-col cols="12" class="d-flex justify-space-between align-center">
               <h2 class="text-h5">Profile</h2>
               <div class="d-flex align-center">
@@ -69,9 +102,9 @@ function changePass() {
               </div>
             </v-col>
           </v-row>
-
+          <v-divider class=""></v-divider>
           <!-- Profile Dashboard Starts Here -->
-          <v-card class="rounded-xl pa-6" elevation="2">
+          <v-card class="rounded-xl pa-6 mt-5" style="background-color: lightblue" elevation="2">
             <v-row>
               <!-- Profile Section -->
               <v-col cols="12" md="4" class="text-center">
@@ -172,7 +205,7 @@ function changePass() {
                       >Are you sure you want to signout?</v-card-subtitle
                     >
                     <div class="mt-6">
-                      <v-btn color="blue" class="text-white" to="/login" block> Sign Out </v-btn>
+                      <v-btn color="blue" class="text-white" to="/" block> Sign Out </v-btn>
                     </div>
                   </v-card-title>
                 </v-card>
@@ -196,5 +229,15 @@ function changePass() {
 .dashboard-bg {
   background: url('/src/assets/bg-water.jpg') no-repeat center center;
   background-size: cover;
+}
+
+.sidebar-border {
+  border-right: 2px solid #cccccc; /* Border on the right */
+  height: 100vh; /* Fill the whole screen vertically */
+  position: fixed; /* Stick to the side */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* So it stays above everything */
+  width: 350px;
 }
 </style>

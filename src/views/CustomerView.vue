@@ -25,27 +25,61 @@ function placeOrder() {
   <v-responsive>
     <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
       <v-row class="justify-center align-start" style="min-height: 100vh">
-        <v-col cols="12" md="3">
-          <v-card class="pa-4 rounded-xl dashboard-bg fill-height" elevation="2">
-            <v-list nav dense>
-              <v-list-item-title class="text-h6 mb-2">Aquatech</v-list-item-title>
-              <v-divider class="mb-2"></v-divider>
-              <v-list-item to="#" prepend-icon="mdi-view-dashboard">Dashboard</v-list-item>
-              <v-divider class="mb-2"></v-divider>
-              <v-list-item to="/promo_dashboard" prepend-icon="mdi-sale">Promos</v-list-item>
-              <v-divider class="mb-2"></v-divider>
-              <v-list-item to="/history_dashboard" prepend-icon="mdi-history"
-                >Purchase History</v-list-item
-              >
-              <v-divider class="mb-2"></v-divider>
-              <v-list-item to="/profile_dashboard" prepend-icon="mdi-account-circle"
-                >Profile</v-list-item
-              >
-              <v-divider class="mb-2"></v-divider>
-              <v-spacer class="my-15"></v-spacer>
-              <v-list-item prepend-icon="mdi-logout" @click="dialog4 = true">Sign out</v-list-item>
-            </v-list>
-          </v-card>
+        <v-col>
+          <v-list
+            style="min-height: 97vh; background-color: lightblue"
+            class="sidebar-border"
+            nav
+            dense
+            fluid
+          >
+            <v-list-item
+              style="background-color: white"
+              prepend-icon="mdi-view-dashboard"
+              class="text-h4"
+              >Aquatech</v-list-item
+            >
+
+            <v-list-item
+              to="#"
+              class="mt-4"
+              style="background-color: white"
+              prepend-icon="mdi-view-dashboard"
+              >Dashboard</v-list-item
+            >
+
+            <v-list-item
+              to="/promo_dashboard"
+              class="mt-2"
+              style="background-color: white"
+              prepend-icon="mdi-sale"
+              >Promos</v-list-item
+            >
+
+            <v-list-item
+              to="/history_dashboard"
+              class="mt-2"
+              style="background-color: white"
+              prepend-icon="mdi-history"
+              >Purchase History</v-list-item
+            >
+
+            <v-list-item
+              to="/profile_dashboard"
+              class="mt-2"
+              style="background-color: white"
+              prepend-icon="mdi-account-circle"
+              >Profile</v-list-item
+            >
+
+            <v-list-item
+              style="background-color: white"
+              class="mt-2"
+              prepend-icon="mdi-logout"
+              @click="dialog4 = true"
+              >Sign out</v-list-item
+            >
+          </v-list>
         </v-col>
 
         <v-col cols="12" md="9">
@@ -66,10 +100,10 @@ function placeOrder() {
               </div>
             </v-col>
           </v-row>
-
-          <v-row class="d-flex justify-center align-center">
+          <v-divider class=""></v-divider>
+          <v-row class="d-flex justify-center align-center mt-2">
             <v-col cols="12" sm="6" md="3">
-              <v-card class="text-center py-4" elevation="2">
+              <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
                 <v-img src="src\assets\onegallon.jpg" height="150px" cover></v-img>
                 <v-card-title>1 Gallon</v-card-title>
                 <v-card-subtitle>₱15</v-card-subtitle>
@@ -80,7 +114,7 @@ function placeOrder() {
             </v-col>
 
             <v-col cols="12" sm="6" md="3">
-              <v-card class="text-center py-4" elevation="2">
+              <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
                 <v-img src="src\assets\twogallons.jpg" height="150px" cover></v-img>
                 <v-card-title>2 Gallons</v-card-title>
                 <v-card-subtitle>₱30</v-card-subtitle>
@@ -91,7 +125,7 @@ function placeOrder() {
             </v-col>
 
             <v-col cols="12" sm="6" md="3">
-              <v-card class="text-center py-4" elevation="2">
+              <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
                 <v-img src="src\assets\threegallons.jpg" height="150px" cover></v-img>
                 <v-card-title>3 Gallons</v-card-title>
                 <v-card-subtitle>₱45</v-card-subtitle>
@@ -102,7 +136,7 @@ function placeOrder() {
             </v-col>
 
             <v-col cols="12" sm="6" md="3">
-              <v-card class="text-center py-4" elevation="2">
+              <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
                 <v-img src="src\assets\fourgallons.jpg" height="150px" cover></v-img>
                 <v-card-title>4 Gallons</v-card-title>
                 <v-card-subtitle>₱60</v-card-subtitle>
@@ -299,7 +333,7 @@ function placeOrder() {
                     >Are you sure you want to signout?</v-card-subtitle
                   >
                   <div class="mt-6">
-                    <v-btn color="blue" class="text-white"  to="/login" block> Sign Out </v-btn>
+                    <v-btn color="blue" class="text-white" to="/" block> Sign Out </v-btn>
                   </div>
                 </v-card-title>
               </v-card>
@@ -322,6 +356,16 @@ function placeOrder() {
 .dashboard-bg {
   background: url('/src\assets\bg-water.jpg') no-repeat center center;
   background-size: cover;
+}
+
+.sidebar-border {
+  border-right: 2px solid #cccccc; /* Border on the right */
+  height: 100vh; /* Fill the whole screen vertically */
+  position: fixed; /* Stick to the side */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* So it stays above everything */
+  width: 350px;
 }
 
 .gap-2 > * + * {
