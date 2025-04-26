@@ -40,7 +40,7 @@ const login = () => {}
                 block
                 class="mb-3 text-white"
                 height="48"
-                to="/custom_dashboard"
+                to="/customer_dashboard"
               >
                 Login
               </v-btn>

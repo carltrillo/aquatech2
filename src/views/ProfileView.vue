@@ -82,6 +82,10 @@ import userpic from '@/assets/userpic.jpg'
                     <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">₱100</h4>
                     <p class="text-caption d-flex justify-center">Money Saved</p>
                   </v-col>
+                  <v-col cols="4" class="text-center mt-10">
+                    <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">1</h4>
+                    <p class="text-caption d-flex justify-center">Voucher Available</p>
+                  </v-col>
                 </v-row>
               </v-col>
             </v-row>
