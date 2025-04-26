@@ -9,17 +9,21 @@ import userpic from '@/assets/userpic.jpg'
         <v-col cols="12" md="3">
           <v-card class="pa-4 rounded-xl dashboard-bg fill-height" elevation="2">
             <v-list nav dense>
-              <v-list-item-title class="text-h6 mb-2">VueA</v-list-item-title>
+              <v-list-item-title class="text-h6 mb-2">Aquatech</v-list-item-title>
               <v-divider class="mb-2"></v-divider>
               <v-list-item to="/customer_dashboard" prepend-icon="mdi-view-dashboard"
                 >Dashboard</v-list-item
               >
+              <v-divider class="mb-2"></v-divider>
               <v-list-item to="/promo_dashboard" prepend-icon="mdi-sale">Promos</v-list-item>
+              <v-divider class="mb-2"></v-divider>
               <v-list-item to="" prepend-icon="mdi-history">Purchase History</v-list-item>
+              <v-divider class="mb-2"></v-divider>
               <v-list-item to="/profile_dashboard" prepend-icon="mdi-account-circle"
                 >Profile</v-list-item
               >
-              <v-spacer class="my-2"></v-spacer>
+              <v-divider class="mb-2"></v-divider>
+              <v-spacer class="my-15"></v-spacer>
               <v-list-item prepend-icon="mdi-logout">Sign out</v-list-item>
             </v-list>
           </v-card>
@@ -58,7 +62,7 @@ import userpic from '@/assets/userpic.jpg'
               <v-card class="text-center py-4" elevation="2">
                 <v-img src="src\assets\fivegallons.jpg" height="150px" cover></v-img>
                 <v-card-title>3 + 2 Gallons</v-card-title>
-                <v-card-subtitle>₱68</v-card-subtitle>
+                <v-card-subtitle>₱65</v-card-subtitle>
                 <v-card-subtitle color="primary" class="mt-2">Purchased</v-card-subtitle>
               </v-card>
             </v-col>

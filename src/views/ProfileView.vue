@@ -8,19 +8,24 @@ import userpic from '@/assets/userpic.jpg'
       <v-row class="justify-center align-start" style="min-height: 100vh">
         <!-- Sidebar (unchanged) -->
         <v-col cols="12" md="3">
-          <v-card class="pa-4 rounded-xl dashboard-bg fill-height" elevation="2">
+          <v-card class="pa-4 rounded-xl fill-height dashboard-bg" elevation="2">
             <v-list nav dense>
-              <v-list-item-title class="text-h6 mb-2">VueA</v-list-item-title>
+              <v-list-item-title class="text-h6 mb-2">Aquatech</v-list-item-title>
               <v-divider class="mb-2"></v-divider>
               <v-list-item to="/customer_dashboard" prepend-icon="mdi-view-dashboard"
                 >Dashboard</v-list-item
               >
+              <v-divider class="mb-2"></v-divider>
               <v-list-item to="/promo_dashboard" prepend-icon="mdi-sale">Promos</v-list-item>
+              <v-divider class="mb-2"></v-divider>
               <v-list-item to="/history_dashboard" prepend-icon="mdi-history"
                 >Purchase History</v-list-item
               >
+              <v-divider class="mb-2"></v-divider>
               <v-list-item to="#" prepend-icon="mdi-account-circle">Profile</v-list-item>
-              <v-spacer class="my-2"></v-spacer>
+              <v-divider class="mb-2"></v-divider>
+              <v-spacer class="my-15"></v-spacer>
+
               <v-list-item prepend-icon="mdi-logout">Sign out</v-list-item>
             </v-list>
           </v-card>
@@ -31,8 +36,8 @@ import userpic from '@/assets/userpic.jpg'
           <v-row class="mb-4">
             <v-col cols="12" class="d-flex justify-space-between align-center">
               <h2 class="text-h5">Profile</h2>
-              <div class="d-flex align-center gap-2">
-                <v-icon>mdi-bell</v-icon>
+              <div class="d-flex align-center">
+                <v-icon class="mr-2">mdi-bell</v-icon>
                 <router-link to="/profile_dashboard">
                   <v-avatar size="35">
                     <img
@@ -59,7 +64,7 @@ import userpic from '@/assets/userpic.jpg'
                   />
                 </v-avatar>
                 <h3 class="text-h6 mb-1">User</h3>
-                <p class="text-caption mb-4">Regular Customer</p>
+                <p class="text-caption mb-4">Customer</p>
 
                 <div class="d-flex justify-center mt-4 gap-2">
                   <v-btn variant="outlined" color="primary" size="small">Edit Profile</v-btn>
@@ -98,16 +103,5 @@ import userpic from '@/assets/userpic.jpg'
 .dashboard-bg {
   background: url('/src/assets/bg-water.jpg') no-repeat center center;
   background-size: cover;
-}
-
-.gap-2 > * + * {
-  margin-left: 8px;
-}
-
-/* Fake Chart Background */
-.graph-placeholder {
-  height: 200px;
-  background: linear-gradient(135deg, #e0e7ff 0%, #f9fafb 100%);
-  border-radius: 16px;
 }
 </style>
