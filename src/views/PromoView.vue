@@ -13,6 +13,9 @@ const paymentOptions = ['COD', 'Gcash']
 function placeOrder() {
   alert(`Order placed! Location: ${location.value}, Payment: ${paymentMethod.value}`)
   dialog.value = false
+  dialog1.value = false
+  dialog2.value = false
+  dialog3.value = false
 }
 </script>
 

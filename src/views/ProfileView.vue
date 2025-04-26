@@ -1,5 +1,19 @@
 <script setup>
+import { ref } from 'vue'
 import userpic from '@/assets/userpic.jpg'
+
+const dialog = ref(false)
+const dialog1 = ref(false)
+
+function changeName() {
+  alert(`Name change success!`)
+  dialog.value = false
+}
+
+function changePass() {
+  alert(`Password change success!`)
+  dialog1.value = false
+}
 </script>
 
 <template>
@@ -26,7 +40,7 @@ import userpic from '@/assets/userpic.jpg'
               <v-divider class="mb-2"></v-divider>
               <v-spacer class="my-15"></v-spacer>
 
-              <v-list-item prepend-icon="mdi-logout">Sign out</v-list-item>
+              <v-list-item prepend-icon="mdi-logout" @click="dialog = true">Sign out</v-list-item>
             </v-list>
           </v-card>
         </v-col>
@@ -67,7 +81,12 @@ import userpic from '@/assets/userpic.jpg'
                 <p class="text-caption mb-4">Customer</p>
 
                 <div class="d-flex justify-center mt-4 gap-2">
-                  <v-btn variant="outlined" color="primary" size="small">Edit Profile</v-btn>
+                  <v-btn variant="outlined" color="primary" size="small" @click="dialog = true"
+                    >Edit Name</v-btn
+                  >
+                  <v-btn color="blue" class="text-white ml-2" size="small" @click="dialog1 = true"
+                    >Edit Password</v-btn
+                  >
                 </div>
               </v-col>
 
@@ -88,6 +107,58 @@ import userpic from '@/assets/userpic.jpg'
                   </v-col>
                 </v-row>
               </v-col>
+
+              <v-dialog v-model="dialog" width="400">
+                <v-card class="pa-6 rounded-xl" elevation="4">
+                  <v-card-title class="justify-center">
+                    <v-btn color="green" class="text-white" rounded="lg" width="100%" block>
+                      Name Edit
+                    </v-btn>
+                  </v-card-title>
+
+                  <v-card-text>
+                    <v-text-field
+                      v-model="name"
+                      label="Enter New Full Name"
+                      outlined
+                      dense
+                      hide-details
+                    ></v-text-field>
+
+                    <div class="mt-6">
+                      <v-btn color="blue" class="text-white mt-4" block @click="changeName">
+                        Change Name
+                      </v-btn>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog v-model="dialog1" width="400">
+                <v-card class="pa-6 rounded-xl" elevation="4">
+                  <v-card-title class="justify-center">
+                    <v-btn color="green" class="text-white" rounded="lg" width="100%" block>
+                      Password Edit
+                    </v-btn>
+                  </v-card-title>
+
+                  <v-card-text>
+                    <v-text-field
+                      v-model="name"
+                      label="Enter New Password"
+                      outlined
+                      dense
+                      hide-details
+                    ></v-text-field>
+
+                    <div class="mt-6">
+                      <v-btn color="blue" class="text-white mt-4" block @click="changePass">
+                        Change Password
+                      </v-btn>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
             </v-row>
           </v-card>
         </v-col>

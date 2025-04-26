@@ -1,5 +1,18 @@
 <script setup>
+import { ref } from 'vue'
 import userpic from '@/assets/userpic.jpg'
+
+const dialog = ref(false)
+const dialog1 = ref(false)
+const location = ref('')
+const paymentMethod = ref('COD')
+const paymentOptions = ['COD', 'Gcash']
+
+function placeOrder() {
+  alert(`Order placed! Location: ${location.value}, Payment: ${paymentMethod.value}`)
+  dialog.value = false
+  dialog1.value = false
+}
 </script>
 
 <template>
@@ -54,7 +67,9 @@ import userpic from '@/assets/userpic.jpg'
                 <v-img src="src\assets\twogallons.jpg" height="150px" cover></v-img>
                 <v-card-title>2 Gallons</v-card-title>
                 <v-card-subtitle>₱30</v-card-subtitle>
-                <v-card-subtitle color="primary" class="mt-2">Purchased</v-card-subtitle>
+                <v-card-actions>
+                  <v-btn color="primary" @click="dialog = true" block>Buy Again</v-btn>
+                </v-card-actions>
               </v-card>
             </v-col>
 
@@ -63,9 +78,101 @@ import userpic from '@/assets/userpic.jpg'
                 <v-img src="src\assets\fivegallons.jpg" height="150px" cover></v-img>
                 <v-card-title>3 + 2 Gallons</v-card-title>
                 <v-card-subtitle>₱65</v-card-subtitle>
-                <v-card-subtitle color="primary" class="mt-2">Purchased</v-card-subtitle>
+                <v-card-actions>
+                  <v-btn color="primary" @click="dialog1 = true" block>Buy Again</v-btn>
+                </v-card-actions>
               </v-card>
             </v-col>
+
+            <v-dialog v-model="dialog" width="400">
+              <v-card class="pa-6 rounded-xl" elevation="4">
+                <v-card-title class="justify-center">
+                  <v-btn color="red" class="text-white" rounded="lg" width="100%" block>
+                    2 Gallons
+                  </v-btn>
+                </v-card-title>
+
+                <v-card-text>
+                  <v-text-field
+                    v-model="location"
+                    label="Enter Location"
+                    outlined
+                    dense
+                    hide-details
+                  ></v-text-field>
+
+                  <v-select
+                    v-model="paymentMethod"
+                    :items="paymentOptions"
+                    label="Payment Method"
+                    outlined
+                    dense
+                    hide-details
+                    class="mt-4"
+                  ></v-select>
+
+                  <div class="text-center mt-2">
+                    <v-btn variant="text" color="primary" @click="paymentMethod = 'Gcash'"></v-btn>
+                  </div>
+
+                  <div class="mt-6">
+                    <div class="d-flex justify-space-between">
+                      <span class="font-weight-medium">Total</span>
+                      <span class="font-weight-bold">₱30.00</span>
+                    </div>
+
+                    <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      Place Order
+                    </v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialog1" width="400">
+              <v-card class="pa-6 rounded-xl" elevation="4">
+                <v-card-title class="justify-center">
+                  <v-btn color="red" class="text-white" rounded="lg" width="100%" block>
+                    3 + 2 Gallons
+                  </v-btn>
+                </v-card-title>
+
+                <v-card-text>
+                  <v-text-field
+                    v-model="location"
+                    label="Enter Location"
+                    outlined
+                    dense
+                    hide-details
+                  ></v-text-field>
+
+                  <v-select
+                    v-model="paymentMethod"
+                    :items="paymentOptions"
+                    label="Payment Method"
+                    outlined
+                    dense
+                    hide-details
+                    class="mt-4"
+                  ></v-select>
+
+                  <div class="text-center mt-2">
+                    <v-btn variant="text" color="primary" @click="paymentMethod = 'Gcash'"></v-btn>
+                  </div>
+
+                  <div class="mt-6">
+                    <div class="d-flex justify-space-between">
+                      <span class="font-weight-medium">Total</span>
+                      <span class="font-weight-bold">₱60.00</span>
+                    </div>
+
+                    <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      Place Order
+                    </v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
           </v-row>
         </v-col>
       </v-row>
