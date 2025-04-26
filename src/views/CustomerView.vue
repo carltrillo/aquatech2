@@ -2,10 +2,12 @@
 import { ref } from 'vue'
 import userpic from '@/assets/userpic.jpg'
 
+const confirm = ref('')
 const dialog = ref(false)
 const dialog1 = ref(false)
 const dialog2 = ref(false)
 const dialog3 = ref(false)
+const dialog4 = ref(false)
 const location = ref('')
 const paymentMethod = ref('COD')
 const paymentOptions = ['COD', 'Gcash']
@@ -41,7 +43,7 @@ function placeOrder() {
               >
               <v-divider class="mb-2"></v-divider>
               <v-spacer class="my-15"></v-spacer>
-              <v-list-item prepend-icon="mdi-logout">Sign out</v-list-item>
+              <v-list-item prepend-icon="mdi-logout" @click="dialog4 = true">Sign out</v-list-item>
             </v-list>
           </v-card>
         </v-col>
@@ -105,7 +107,7 @@ function placeOrder() {
                 <v-card-title>4 Gallons</v-card-title>
                 <v-card-subtitle>₱60</v-card-subtitle>
                 <v-card-actions>
-                  <v-btn color="primary" @click="dialog3 = true" block>Purchase</v-btn>
+                  <v-btn color="primary" c block>Purchase</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -287,6 +289,19 @@ function placeOrder() {
                     </v-btn>
                   </div>
                 </v-card-text>
+              </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialog4" width="400">
+              <v-card class="pa-6 rounded-xl" elevation="4">
+                <v-card-title>
+                  <v-card-subtitle class="ml-6" v-model="confirm" block
+                    >Are you sure you want to signout?</v-card-subtitle
+                  >
+                  <div class="mt-6">
+                    <v-btn color="blue" class="text-white" block> Sign Out </v-btn>
+                  </div>
+                </v-card-title>
               </v-card>
             </v-dialog>
           </v-row>
