@@ -107,7 +107,7 @@ function placeOrder() {
                 <v-card-title>4 Gallons</v-card-title>
                 <v-card-subtitle>₱60</v-card-subtitle>
                 <v-card-actions>
-                  <v-btn color="primary" c block>Purchase</v-btn>
+                  <v-btn color="primary" @click="dialog3 = true" block>Purchase</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -299,7 +299,7 @@ function placeOrder() {
                     >Are you sure you want to signout?</v-card-subtitle
                   >
                   <div class="mt-6">
-                    <v-btn color="blue" class="text-white" block> Sign Out </v-btn>
+                    <v-btn color="blue" class="text-white"  to="/login" block> Sign Out </v-btn>
                   </div>
                 </v-card-title>
               </v-card>

@@ -172,7 +172,7 @@ function changePass() {
                       >Are you sure you want to signout?</v-card-subtitle
                     >
                     <div class="mt-6">
-                      <v-btn color="blue" class="text-white" block> Sign Out </v-btn>
+                      <v-btn color="blue" class="text-white" to="/login" block> Sign Out </v-btn>
                     </div>
                   </v-card-title>
                 </v-card>
