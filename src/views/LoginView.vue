@@ -34,7 +34,14 @@ const login = () => {}
                 @click:append-inner="showPassword = !showPassword"
               />
 
-              <v-btn type="submit" color="blue-darken-1" block class="mb-3 text-white" height="48">
+              <v-btn
+                type="submit"
+                color="blue-darken-1"
+                block
+                class="mb-3 text-white"
+                height="48"
+                to="/custom_dashboard"
+              >
                 Login
               </v-btn>
             </v-form>

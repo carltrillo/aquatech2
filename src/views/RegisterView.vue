@@ -32,14 +32,7 @@ const register = () => {
                 required
               />
               <v-text-field label="Username" v-model="user" type="text" dense outlined required />
-              <v-text-field
-                label="Password"
-                v-model="password"
-                type="text"
-                dense
-                outlined
-                required
-              />
+              <v-text-field label="Password" v-model="password" type="" dense outlined required />
 
               <v-btn type="submit" color="green-darken-1" block class="mb-3 text-white" height="48">
                 Register
