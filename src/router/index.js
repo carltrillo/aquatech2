@@ -4,6 +4,7 @@ import RegisterView from '@/views/RegisterView.vue'
 import CustomerView from '@/views/CustomerView.vue'
 import PromoView from '@/views/PromoView.vue'
 import ProfileView from '@/views/ProfileView.vue'
+import HistoryView from '@/views/HistoryView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/profile_dashboard',
       name: 'profile_dashboard',
       component: ProfileView,
+    },
+    {
+      path: '/history_dashboard',
+      name: 'history_dashboard',
+      component: HistoryView,
     },
   ],
 })

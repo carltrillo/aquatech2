@@ -16,7 +16,9 @@ import userpic from '@/assets/userpic.jpg'
                 >Dashboard</v-list-item
               >
               <v-list-item to="/promo_dashboard" prepend-icon="mdi-sale">Promos</v-list-item>
-              <v-list-item to="#" prepend-icon="mdi-history">Purchase History</v-list-item>
+              <v-list-item to="/history_dashboard" prepend-icon="mdi-history"
+                >Purchase History</v-list-item
+              >
               <v-list-item to="#" prepend-icon="mdi-account-circle">Profile</v-list-item>
               <v-spacer class="my-2"></v-spacer>
               <v-list-item prepend-icon="mdi-logout">Sign out</v-list-item>
