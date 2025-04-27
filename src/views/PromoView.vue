@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import userpic from '@/assets/userpic.jpg'
+import twogallons from '@/assets/twogallons.jpg'
+import threegallons from '@/assets/threegallons.jpg'
+import fourgallons from '@/assets/fourgallons.jpg'
+import fivegallons from '@/assets/fivegallons.jpg'
 
 const confirm = ref('')
 const dialog = ref(false)
@@ -145,7 +149,7 @@ function openDialog(product) {
           <v-row class="d-flex justify-center align-center mt-2">
             <v-col cols="12" sm="6" md="3">
               <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
-                <v-img src="/src/assets/twogallons.jpg" height="150px" cover></v-img>
+                <v-img :src="twogallons" height="150px" cover></v-img>
                 <v-card-title>1 + 1 Gallons</v-card-title>
                 <v-card-subtitle>₱25</v-card-subtitle>
                 <v-card-actions>
@@ -161,7 +165,7 @@ function openDialog(product) {
 
             <v-col cols="12" sm="6" md="3">
               <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
-                <v-img src="/src/assets/threegallons.jpg" height="150px" cover></v-img>
+                <v-img :src="threegallons" height="150px" cover></v-img>
                 <v-card-title>2 + 1 Gallons</v-card-title>
                 <v-card-subtitle>₱40</v-card-subtitle>
                 <v-card-actions>
@@ -177,7 +181,7 @@ function openDialog(product) {
 
             <v-col cols="12" sm="6" md="3">
               <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
-                <v-img src="/src/assets/fourgallons.jpg" height="150px" cover></v-img>
+                <v-img :src="fourgallons" height="150px" cover></v-img>
                 <v-card-title>2 + 2 Gallons</v-card-title>
                 <v-card-subtitle>₱50</v-card-subtitle>
                 <v-card-actions>
@@ -193,7 +197,7 @@ function openDialog(product) {
 
             <v-col cols="12" sm="6" md="3">
               <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
-                <v-img src="/src/assets/fivegallons.jpg" height="150px" cover></v-img>
+                <v-img :src="fivegallons" height="150px" cover></v-img>
                 <v-card-title>3 + 2 Gallons</v-card-title>
                 <v-card-subtitle>₱65</v-card-subtitle>
                 <v-card-actions>
