@@ -9,6 +9,7 @@ const dialog2 = ref(false)
 
 const name = ref('')
 const pass = ref('')
+const showSidebar = ref(false)
 
 function changeName() {
   alert(`Name change success!`)
@@ -19,6 +20,18 @@ function changePass() {
   alert(`Password change success!`)
   dialog1.value = false
 }
+
+async function uploadAvatar(event) {
+  const file = event.target.files[0]
+  if (!file) return
+
+  // if you want just local preview:
+  const reader = new FileReader()
+  reader.onload = () => {
+    userpic.value = reader.result
+  }
+  reader.readAsDataURL(file)
+}
 </script>
 
 <template>
@@ -26,7 +39,8 @@ function changePass() {
     <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
       <v-row class="justify-center align-start" style="min-height: 100vh">
         <!-- Sidebar (unchanged) -->
-        <v-col>
+
+        <v-col v-show="showSidebar || $vuetify.display.mdAndUp">
           <v-list
             style="min-height: 97vh; background-color: lightblue"
             class="sidebar-border"
@@ -38,48 +52,54 @@ function changePass() {
               style="background-color: white"
               prepend-icon="mdi-bottle-tonic"
               class="text-h4 special-gothic-expanded-one-regular"
-              ><a style="color: blue" class="special-gothic-expanded-one-regular">Aqua</a
-              >tech</v-list-item
             >
+              <a style="color: blue" class="special-gothic-expanded-one-regular">Aqua</a>tech
+            </v-list-item>
+
             <v-list-item
               to="/customer_dashboard"
               class="mt-4"
               style="background-color: white"
               prepend-icon="mdi-view-dashboard"
-              >Dashboard</v-list-item
             >
+              Dashboard
+            </v-list-item>
 
             <v-list-item
               to="/promo_dashboard"
               class="mt-2"
               style="background-color: white"
               prepend-icon="mdi-sale"
-              >Promos</v-list-item
             >
+              Promos
+            </v-list-item>
 
             <v-list-item
               to="/history_dashboard"
               class="mt-2"
               style="background-color: white"
               prepend-icon="mdi-history"
-              >Purchase History</v-list-item
             >
+              Buy Again
+            </v-list-item>
 
             <v-list-item
               to="#"
               class="mt-2"
               style="background-color: white"
               prepend-icon="mdi-account-circle"
-              >Profile</v-list-item
             >
+              Profile
+            </v-list-item>
 
             <v-list-item
               style="background-color: white"
               class="mt-2"
               prepend-icon="mdi-logout"
               @click="dialog2 = true"
-              >Sign out</v-list-item
             >
+              Sign out
+            </v-list-item>
           </v-list>
         </v-col>
 
@@ -87,6 +107,10 @@ function changePass() {
         <v-col cols="12" md="9">
           <v-row class="mb-3">
             <v-col cols="12" class="d-flex justify-space-between align-center">
+              <v-btn icon @click="showSidebar = !showSidebar" class="d-md-none">
+                <v-icon>mdi-menu</v-icon>
+              </v-btn>
+
               <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: green">
                 Profile
               </h2>
@@ -110,13 +134,21 @@ function changePass() {
             <v-row>
               <!-- Profile Section -->
               <v-col cols="12" md="4" class="text-center">
-                <v-avatar size="100" class="mb-4">
-                  <img
-                    :src="userpic"
-                    alt="Profile Picture"
-                    style="object-fit: cover; object-position: center; width: 100%; height: 100%"
+                <label style="cursor: pointer; display: inline-block">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    @change="uploadAvatar"
+                    style="display: none"
                   />
-                </v-avatar>
+                  <v-avatar size="100" class="mb-4">
+                    <img
+                      :src="userpic"
+                      alt="Profile Picture"
+                      style="object-fit: cover; object-position: center; width: 100%; height: 100%"
+                    />
+                  </v-avatar>
+                </label>
                 <h3 class="text-h6 mb-1">User</h3>
                 <p class="text-caption mb-4">Customer</p>
 

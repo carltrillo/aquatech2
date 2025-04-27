@@ -11,6 +11,7 @@ const dialog3 = ref(false)
 const location = ref('')
 const quantity = ref(1)
 const pricePerGallon = 15
+const showSidebar = ref(false)
 
 const notifications = ref([]) // <-- NEW: store order notifications
 const selectedProduct = ref({ quantity: 1, price: 15 }) // <-- NEW: to store selected product info
@@ -41,7 +42,7 @@ function openDialog(product) {
   <v-responsive>
     <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
       <v-row class="justify-center align-start" style="min-height: 100vh">
-        <v-col>
+        <v-col v-show="showSidebar || $vuetify.display.mdAndUp">
           <v-list
             style="min-height: 97vh; background-color: lightblue"
             class="sidebar-border"
@@ -53,57 +54,66 @@ function openDialog(product) {
               style="background-color: white"
               prepend-icon="mdi-bottle-tonic"
               class="text-h4 special-gothic-expanded-one-regular"
-              ><a style="color: blue" class="special-gothic-expanded-one-regular">Aqua</a
-              >tech</v-list-item
             >
+              <a style="color: blue" class="special-gothic-expanded-one-regular">Aqua</a>tech
+            </v-list-item>
 
             <v-list-item
               to="/customer_dashboard"
               class="mt-4"
               style="background-color: white"
               prepend-icon="mdi-view-dashboard"
-              >Dashboard</v-list-item
             >
+              Dashboard
+            </v-list-item>
 
             <v-list-item
               to="/promo_dashboard"
               class="mt-2"
               style="background-color: white"
               prepend-icon="mdi-sale"
-              >Promos</v-list-item
             >
+              Promos
+            </v-list-item>
 
             <v-list-item
               to="#"
               class="mt-2"
               style="background-color: white"
               prepend-icon="mdi-history"
-              >Purchase History</v-list-item
             >
+              Buy Again
+            </v-list-item>
 
             <v-list-item
               to="/profile_dashboard"
               class="mt-2"
               style="background-color: white"
               prepend-icon="mdi-account-circle"
-              >Profile</v-list-item
             >
+              Profile
+            </v-list-item>
 
             <v-list-item
               style="background-color: white"
               class="mt-2"
               prepend-icon="mdi-logout"
               @click="dialog2 = true"
-              >Sign out</v-list-item
             >
+              Sign out
+            </v-list-item>
           </v-list>
         </v-col>
 
         <v-col cols="12" md="9">
           <v-row class="mb-4">
             <v-col cols="12" class="d-flex justify-space-between align-center">
+              <v-btn icon @click="showSidebar = !showSidebar" class="d-md-none">
+                <v-icon>mdi-menu</v-icon>
+              </v-btn>
+
               <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: green">
-                Purchase History
+                Buy Again
               </h2>
               <div class="d-flex align-center gap-2">
                 <v-badge
