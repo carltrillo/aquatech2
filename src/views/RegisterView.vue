@@ -92,7 +92,7 @@ const register = () => {
 }
 
 .login-bg {
-  background: url('/src\assets\bg-water.jpg') no-repeat center center;
+  background: url('/src/assets/bg-water.jpg') no-repeat center center;
   background-size: cover;
 }
 </style>
