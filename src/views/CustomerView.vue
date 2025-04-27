@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import userpic from '@/assets/userpic.jpg'
 
 const confirm = ref('')
@@ -8,9 +8,14 @@ const dialog1 = ref(false)
 const dialog2 = ref(false)
 const dialog3 = ref(false)
 const dialog4 = ref(false)
+const dialog5 = ref(false)
 const location = ref('')
+const quantity = ref(1)
 const paymentMethod = ref('COD')
 const paymentOptions = ['COD', 'Gcash']
+
+const pricePerGallon = 15
+const totalPrice = computed(() => quantity.value * pricePerGallon)
 
 function placeOrder() {
   alert(`Order placed! Location: ${location.value}, Payment: ${paymentMethod.value}`)
@@ -18,6 +23,8 @@ function placeOrder() {
   dialog1.value = false
   dialog2.value = false
   dialog3.value = false
+  dialog4.value = false
+  dialog5.value = false
 }
 </script>
 
@@ -35,9 +42,11 @@ function placeOrder() {
           >
             <v-list-item
               style="background-color: white"
-              prepend-icon="mdi-view-dashboard"
-              class="text-h4"
-              >Aquatech</v-list-item
+              prepend-icon="mdi-bottle-tonic"
+              prepend-icon-color="blue"
+              class="text-h4 special-gothic-expanded-one-regular"
+              ><a style="color: blue" class="special-gothic-expanded-one-regular">Aqua</a
+              >tech</v-list-item
             >
 
             <v-list-item
@@ -85,7 +94,9 @@ function placeOrder() {
         <v-col cols="12" md="9">
           <v-row class="mb-4">
             <v-col cols="12" class="d-flex justify-space-between align-center">
-              <h2 class="text-h5">Dashboard</h2>
+              <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: green">
+                Dashboard
+              </h2>
               <div class="d-flex align-center gap-2">
                 <v-icon>mdi-bell</v-icon>
                 <router-link to="/profile_dashboard">
@@ -145,6 +156,8 @@ function placeOrder() {
                 </v-card-actions>
               </v-card>
             </v-col>
+
+            <v-btn color="primary" class="mt-2" @click="dialog5 = true">Custom Purchase</v-btn>
 
             <v-dialog v-model="dialog" width="400">
               <v-card class="pa-6 rounded-xl" elevation="4">
@@ -338,6 +351,58 @@ function placeOrder() {
                 </v-card-title>
               </v-card>
             </v-dialog>
+
+            <v-dialog v-model="dialog5" width="400">
+              <v-card class="pa-6 rounded-xl" elevation="4">
+                <v-card-title class="justify-center">
+                  <v-btn color="red" class="text-white" rounded="lg" width="100%" block>
+                    Custom Purchase
+                  </v-btn>
+                </v-card-title>
+
+                <v-card-text>
+                  <v-text-field
+                    class="mb-3"
+                    v-model.number="quantity"
+                    label="Enter Amount of Gallons"
+                    type="number"
+                    outlined
+                    dense
+                    hide-details
+                    min="1"
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="location"
+                    label="Enter Location"
+                    outlined
+                    dense
+                    hide-details
+                  ></v-text-field>
+
+                  <v-select
+                    v-model="paymentMethod"
+                    :items="paymentOptions"
+                    label="Payment Method"
+                    outlined
+                    dense
+                    hide-details
+                    class="mt-4"
+                  ></v-select>
+
+                  <div class="mt-6">
+                    <div class="d-flex justify-space-between">
+                      <span class="font-weight-medium">Total</span>
+                      <span class="font-weight-bold">₱{{ totalPrice.toFixed(2) }}</span>
+                    </div>
+
+                    <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      Place Order
+                    </v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
           </v-row>
         </v-col>
       </v-row>
@@ -354,8 +419,15 @@ function placeOrder() {
 }
 
 .dashboard-bg {
-  background: url('/src\assets\bg-water.jpg') no-repeat center center;
+  background: url('/src/assets/bg-water.jpg') no-repeat center center;
   background-size: cover;
+  height: 100vh;
+}
+
+.special-gothic-expanded-one-regular {
+  font-family: 'Special Gothic Expanded One', sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .sidebar-border {

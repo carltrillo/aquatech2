@@ -36,11 +36,11 @@ function changePass() {
           >
             <v-list-item
               style="background-color: white"
-              prepend-icon="mdi-view-dashboard"
-              class="text-h4"
-              >Aquatech</v-list-item
+              prepend-icon="mdi-bottle-tonic"
+              class="text-h4 special-gothic-expanded-one-regular"
+              ><a style="color: blue" class="special-gothic-expanded-one-regular">Aqua</a
+              >tech</v-list-item
             >
-
             <v-list-item
               to="/customer_dashboard"
               class="mt-4"
@@ -87,7 +87,9 @@ function changePass() {
         <v-col cols="12" md="9">
           <v-row class="mb-3">
             <v-col cols="12" class="d-flex justify-space-between align-center">
-              <h2 class="text-h5">Profile</h2>
+              <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: green">
+                Profile
+              </h2>
               <div class="d-flex align-center">
                 <v-icon class="mr-2">mdi-bell</v-icon>
                 <router-link to="/profile_dashboard">
@@ -229,6 +231,12 @@ function changePass() {
 .dashboard-bg {
   background: url('/src/assets/bg-water.jpg') no-repeat center center;
   background-size: cover;
+}
+
+.special-gothic-expanded-one-regular {
+  font-family: 'Special Gothic Expanded One', sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .sidebar-border {
