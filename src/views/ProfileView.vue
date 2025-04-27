@@ -90,8 +90,8 @@ function changePass() {
               <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: green">
                 Profile
               </h2>
-              <div class="d-flex align-center">
-                <v-icon class="mr-2">mdi-bell</v-icon>
+              <div class="d-flex align-center gap-2">
+                <v-icon>mdi-bell</v-icon>
                 <router-link to="/profile_dashboard">
                   <v-avatar size="35">
                     <img
@@ -247,5 +247,9 @@ function changePass() {
   left: 0;
   z-index: 1000; /* So it stays above everything */
   width: 350px;
+}
+
+.gap-2 > * + * {
+  margin-left: 15px;
 }
 </style>

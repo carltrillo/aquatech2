@@ -9,22 +9,39 @@ const dialog2 = ref(false)
 const dialog3 = ref(false)
 const dialog4 = ref(false)
 const dialog5 = ref(false)
+const dialog6 = ref(false)
+
 const location = ref('')
 const quantity = ref(1)
-const paymentMethod = ref('COD')
-const paymentOptions = ['COD', 'Gcash']
 
 const pricePerGallon = 15
 const totalPrice = computed(() => quantity.value * pricePerGallon)
 
+const notifications = ref([]) // <-- NEW: store order notifications
+const selectedProduct = ref({ quantity: 1, price: 15 }) // <-- NEW: to store selected product info
+
 function placeOrder() {
-  alert(`Order placed! Location: ${location.value}, Payment: ${paymentMethod.value}`)
+  notifications.value.push({
+    location: location.value,
+    quantity: selectedProduct.value.quantity ?? quantity.value, // Use selected quantity OR custom quantity
+    totalAmount: selectedProduct.value.price ?? quantity.value * pricePerGallon, // Use selected price OR custom total
+    time: new Date().toLocaleTimeString(), // optional, to show time
+  })
+
+  // Reset after order
+  location.value = ''
+  quantity.value = 1
   dialog.value = false
   dialog1.value = false
   dialog2.value = false
   dialog3.value = false
   dialog4.value = false
   dialog5.value = false
+  dialog6.value = false
+}
+
+function openDialog(product) {
+  selectedProduct.value = product
 }
 </script>
 
@@ -98,7 +115,15 @@ function placeOrder() {
                 Dashboard
               </h2>
               <div class="d-flex align-center gap-2">
-                <v-icon>mdi-bell</v-icon>
+                <v-badge
+                  :content="notifications.length"
+                  color="red"
+                  v-if="notifications.length > 0"
+                >
+                  <v-icon @click="dialog6 = true">mdi-bell</v-icon>
+                </v-badge>
+                <v-icon v-else @click="dialog6 = true">mdi-bell</v-icon>
+
                 <router-link to="/profile_dashboard">
                   <v-avatar size="35">
                     <img
@@ -119,7 +144,12 @@ function placeOrder() {
                 <v-card-title>1 Gallon</v-card-title>
                 <v-card-subtitle>₱15</v-card-subtitle>
                 <v-card-actions>
-                  <v-btn color="primary" @click="dialog = true" block>Purchase</v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="(openDialog({ quantity: 1, price: 15 }), (dialog = true))"
+                    block
+                    >Purchase</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -130,7 +160,12 @@ function placeOrder() {
                 <v-card-title>2 Gallons</v-card-title>
                 <v-card-subtitle>₱30</v-card-subtitle>
                 <v-card-actions>
-                  <v-btn color="primary" @click="dialog1 = true" block>Purchase</v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="(openDialog({ quantity: 2, price: 30 }), (dialog1 = true))"
+                    block
+                    >Purchase</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -141,7 +176,12 @@ function placeOrder() {
                 <v-card-title>3 Gallons</v-card-title>
                 <v-card-subtitle>₱45</v-card-subtitle>
                 <v-card-actions>
-                  <v-btn color="primary" @click="dialog2 = true" block>Purchase</v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="(openDialog({ quantity: 3, price: 45 }), (dialog2 = true))"
+                    block
+                    >Purchase</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -152,12 +192,22 @@ function placeOrder() {
                 <v-card-title>4 Gallons</v-card-title>
                 <v-card-subtitle>₱60</v-card-subtitle>
                 <v-card-actions>
-                  <v-btn color="primary" @click="dialog3 = true" block>Purchase</v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="(openDialog({ quantity: 4, price: 60 }), (dialog3 = true))"
+                    block
+                    >Purchase</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </v-col>
 
-            <v-btn color="primary" class="mt-2" @click="dialog5 = true">Custom Purchase</v-btn>
+            <v-btn
+              color="primary"
+              class="mt-2"
+              @click="(openDialog({ quantity: 4, price: 60 }), (dialog5 = true))"
+              >Custom Purchase</v-btn
+            >
 
             <v-dialog v-model="dialog" width="400">
               <v-card class="pa-6 rounded-xl" elevation="4">
@@ -175,20 +225,6 @@ function placeOrder() {
                     dense
                     hide-details
                   ></v-text-field>
-
-                  <v-select
-                    v-model="paymentMethod"
-                    :items="paymentOptions"
-                    label="Payment Method"
-                    outlined
-                    dense
-                    hide-details
-                    class="mt-4"
-                  ></v-select>
-
-                  <div class="text-center mt-2">
-                    <v-btn variant="text" color="primary" @click="paymentMethod = 'Gcash'"></v-btn>
-                  </div>
 
                   <div class="mt-6">
                     <div class="d-flex justify-space-between">
@@ -221,20 +257,6 @@ function placeOrder() {
                     hide-details
                   ></v-text-field>
 
-                  <v-select
-                    v-model="paymentMethod"
-                    :items="paymentOptions"
-                    label="Payment Method"
-                    outlined
-                    dense
-                    hide-details
-                    class="mt-4"
-                  ></v-select>
-
-                  <div class="text-center mt-2">
-                    <v-btn variant="text" color="primary" @click="paymentMethod = 'Gcash'"></v-btn>
-                  </div>
-
                   <div class="mt-6">
                     <div class="d-flex justify-space-between">
                       <span class="font-weight-medium">Total</span>
@@ -266,20 +288,6 @@ function placeOrder() {
                     hide-details
                   ></v-text-field>
 
-                  <v-select
-                    v-model="paymentMethod"
-                    :items="paymentOptions"
-                    label="Payment Method"
-                    outlined
-                    dense
-                    hide-details
-                    class="mt-4"
-                  ></v-select>
-
-                  <div class="text-center mt-2">
-                    <v-btn variant="text" color="primary" @click="paymentMethod = 'Gcash'"></v-btn>
-                  </div>
-
                   <div class="mt-6">
                     <div class="d-flex justify-space-between">
                       <span class="font-weight-medium">Total</span>
@@ -310,20 +318,6 @@ function placeOrder() {
                     dense
                     hide-details
                   ></v-text-field>
-
-                  <v-select
-                    v-model="paymentMethod"
-                    :items="paymentOptions"
-                    label="Payment Method"
-                    outlined
-                    dense
-                    hide-details
-                    class="mt-4"
-                  ></v-select>
-
-                  <div class="text-center mt-2">
-                    <v-btn variant="text" color="primary" @click="paymentMethod = 'Gcash'"></v-btn>
-                  </div>
 
                   <div class="mt-6">
                     <div class="d-flex justify-space-between">
@@ -380,16 +374,6 @@ function placeOrder() {
                     hide-details
                   ></v-text-field>
 
-                  <v-select
-                    v-model="paymentMethod"
-                    :items="paymentOptions"
-                    label="Payment Method"
-                    outlined
-                    dense
-                    hide-details
-                    class="mt-4"
-                  ></v-select>
-
                   <div class="mt-6">
                     <div class="d-flex justify-space-between">
                       <span class="font-weight-medium">Total</span>
@@ -399,6 +383,35 @@ function placeOrder() {
                     <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
                       Place Order
                     </v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialog6" width="400">
+              <v-card class="pa-6 rounded-xl" elevation="4">
+                <v-card-title class="justify-center">
+                  <v-btn color="black" class="text-white" rounded="lg" width="100%" block>
+                    Notifications
+                  </v-btn>
+                </v-card-title>
+
+                <v-card-text>
+                  <div v-if="notifications.length === 0" class="text-center">
+                    <v-card-subtitle>No notifications yet.</v-card-subtitle>
+                  </div>
+
+                  <div v-else>
+                    <div v-for="(notif, index) in notifications" :key="index" class="mb-4">
+                      <v-card-subtitle>
+                        Order #{{ index + 1 }}<br />
+                        Location: {{ notif.location }}<br />
+                        Quantity: {{ notif.quantity }} Gallon(s)<br />
+                        Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
+                        Time: {{ notif.time }}
+                      </v-card-subtitle>
+                      <v-divider class="my-2"></v-divider>
+                    </div>
                   </div>
                 </v-card-text>
               </v-card>
@@ -441,6 +454,6 @@ function placeOrder() {
 }
 
 .gap-2 > * + * {
-  margin-left: 8px;
+  margin-left: 15px;
 }
 </style>
