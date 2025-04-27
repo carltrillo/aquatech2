@@ -1,11 +1,14 @@
 <script setup>
 import { ref } from 'vue'
+import aqlogo from '@/assets/aqlogo.jpg'
 
 const user = ref('')
 const password = ref('')
 const showPassword = ref(false)
 
 const login = () => {}
+
+const loginWithGoogle = () => {}
 </script>
 
 <template>
@@ -13,6 +16,25 @@ const login = () => {}
     <v-container class="fill-height d-flex justify-center align-center pa-4 login-bg" fluid>
       <v-row class="justify-center align-center" style="min-height: 100vh">
         <v-col cols="12" sm="10" md="6" lg="4">
+          <!-- Logo and Title -->
+          <div class="text-center mb-6 rounded-x2">
+            <v-img
+              :src="aqlogo"
+              alt="Aquatech Logo"
+              contain
+              max-width="90"
+              class="mx-auto mb-4"
+              style="border-radius: 12px"
+            ></v-img>
+            <div
+              class="text-h3 font-weight-bold special-gothic-expanded-one-regular"
+              style="letter-spacing: 2px; color: white"
+            >
+              <a style="color: lightblue" class="special-gothic-expanded-one-regular">AQUA</a>TECH
+            </div>
+          </div>
+
+          <!-- Login Card -->
           <v-card class="pa-6 rounded-xl" elevation="2">
             <v-card-title class="text-h5 text-center font-weight-bold">Login</v-card-title>
 
@@ -82,8 +104,14 @@ const login = () => {}
   box-sizing: border-box;
 }
 
+.special-gothic-expanded-one-regular {
+  font-family: 'Special Gothic Expanded One', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .login-bg {
-  background: url('/src\assets\bg-water.jpg') no-repeat center center;
+  background: url('/src/assets/bg-water.jpg') no-repeat center center;
   background-size: cover;
 }
 </style>
