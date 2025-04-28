@@ -41,19 +41,13 @@ async function uploadAvatar(event) {
         <!-- Sidebar (unchanged) -->
 
         <v-col v-show="showSidebar || $vuetify.display.mdAndUp">
-          <v-list
-            style="min-height: 97vh; background-color: lightblue"
-            class="sidebar-border"
-            nav
-            dense
-            fluid
-          >
+          <v-list style="min-height: 97vh" class="sidebar-border sidebar-bg" nav dense fluid>
             <v-list-item
               style="background-color: white"
               prepend-icon="mdi-bottle-tonic"
               class="text-h4 special-gothic-expanded-one-regular"
             >
-              <a style="color: blue" class="special-gothic-expanded-one-regular">Aqua</a>tech
+              <a style="color: #344cb7" class="special-gothic-expanded-one-regular">Aqua</a>tech
             </v-list-item>
 
             <v-list-item
@@ -111,7 +105,7 @@ async function uploadAvatar(event) {
                 <v-icon>mdi-menu</v-icon>
               </v-btn>
 
-              <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: green">
+              <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: #344cb7">
                 Profile
               </h2>
               <div class="d-flex align-center gap-2">
@@ -130,7 +124,7 @@ async function uploadAvatar(event) {
           </v-row>
           <v-divider class=""></v-divider>
           <!-- Profile Dashboard Starts Here -->
-          <v-card class="rounded-xl pa-6 mt-5" style="background-color: lightblue" elevation="2">
+          <v-card class="rounded-xl pa-6 mt-5 sidebar-bg" elevation="2">
             <v-row>
               <!-- Profile Section -->
               <v-col cols="12" md="4" class="text-center">
@@ -149,7 +143,7 @@ async function uploadAvatar(event) {
                     />
                   </v-avatar>
                 </label>
-                <h3 class="text-h6 mb-1">User</h3>
+                <h3 class="text-h6 mb-1">Jason Momoa</h3>
                 <p class="text-caption mb-4">Customer</p>
 
                 <div class="d-flex justify-center mt-4 gap-2">
@@ -260,9 +254,9 @@ async function uploadAvatar(event) {
   box-sizing: border-box;
 }
 
-.dashboard-bg {
-  background: url('/src/assets/bg-water.jpg') no-repeat center center;
-  background-size: cover;
+.sidebar-bg {
+  background: linear-gradient(310deg, blue, lightblue);
+  background-size: 300% 300%;
 }
 
 .special-gothic-expanded-one-regular {

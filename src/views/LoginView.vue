@@ -27,15 +27,16 @@ const loginWithGoogle = () => {}
               style="border-radius: 12px"
             ></v-img>
             <div
-              class="text-h3 font-weight-bold special-gothic-expanded-one-regular"
-              style="letter-spacing: 2px; color: white"
+              class="text-h4 font-weight-bold special-gothic-expanded-one-regular"
+              style="letter-spacing: 2px; color: whitesmoke"
             >
-              <a style="color: lightblue" class="special-gothic-expanded-one-regular">AQUA</a>TECH
+              <a style="color: #344cb7" class="special-gothic-expanded-one-regular">AQUA</a>TECH
             </div>
           </div>
 
           <!-- Login Card -->
           <v-card class="pa-6 rounded-xl" elevation="2">
+            <v-card-title class="text-h10 text-center">Welcome to Aquatech!</v-card-title>
             <v-card-title class="text-h5 text-center font-weight-bold">Login</v-card-title>
 
             <v-card-subtitle class="text-center mb-4 text-body-2">
@@ -111,7 +112,7 @@ const loginWithGoogle = () => {}
 }
 
 .login-bg {
-  background: url('/src/assets/bg-water.jpg') no-repeat center center;
-  background-size: cover;
+  background: linear-gradient(310deg, blue, lightblue);
+  background-size: 300% 300%;
 }
 </style>

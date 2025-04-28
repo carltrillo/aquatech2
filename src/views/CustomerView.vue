@@ -55,19 +55,13 @@ function openDialog(product) {
     <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
       <v-row class="justify-center align-start" style="min-height: 100vh">
         <v-col v-show="showSidebar || $vuetify.display.mdAndUp">
-          <v-list
-            style="min-height: 97vh; background-color: lightblue"
-            class="sidebar-border"
-            nav
-            dense
-            fluid
-          >
+          <v-list style="min-height: 97vh" class="sidebar-border sidebar-bg" nav dense fluid>
             <v-list-item
               style="background-color: white"
               prepend-icon="mdi-bottle-tonic"
               class="text-h4 special-gothic-expanded-one-regular"
             >
-              <a style="color: blue" class="special-gothic-expanded-one-regular">Aqua</a>tech
+              <a style="color: #344cb7" class="special-gothic-expanded-one-regular">Aqua</a>tech
             </v-list-item>
 
             <v-list-item
@@ -124,7 +118,7 @@ function openDialog(product) {
                 <v-icon>mdi-menu</v-icon>
               </v-btn>
 
-              <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: green">
+              <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: #344cb7">
                 Dashboard
               </h2>
               <div class="d-flex align-center gap-2">
@@ -152,13 +146,14 @@ function openDialog(product) {
           <v-divider class=""></v-divider>
           <v-row class="d-flex justify-center align-center mt-2">
             <v-col cols="12" sm="6" md="3">
-              <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
+              <v-card class="text-center py-4 sidebar-bg" elevation="2">
                 <v-img :src="onegallon" height="150px" cover></v-img>
                 <v-card-title>1 Gallon</v-card-title>
                 <v-card-subtitle>₱15</v-card-subtitle>
                 <v-card-actions>
                   <v-btn
-                    color="primary"
+                    color="white"
+                    style="background-color: brown"
                     @click="(openDialog({ quantity: 1, price: 15 }), (dialog = true))"
                     block
                     >Purchase</v-btn
@@ -168,13 +163,14 @@ function openDialog(product) {
             </v-col>
 
             <v-col cols="12" sm="6" md="3">
-              <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
+              <v-card class="text-center py-4 sidebar-bg" elevation="2">
                 <v-img :src="twogallons" height="150px" cover></v-img>
                 <v-card-title>2 Gallons</v-card-title>
                 <v-card-subtitle>₱30</v-card-subtitle>
                 <v-card-actions>
                   <v-btn
-                    color="primary"
+                    color="white"
+                    style="background-color: brown"
                     @click="(openDialog({ quantity: 2, price: 30 }), (dialog1 = true))"
                     block
                     >Purchase</v-btn
@@ -184,13 +180,14 @@ function openDialog(product) {
             </v-col>
 
             <v-col cols="12" sm="6" md="3">
-              <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
+              <v-card class="text-center py-4 sidebar-bg" elevation="2">
                 <v-img :src="threegallons" height="150px" cover></v-img>
                 <v-card-title>3 Gallons</v-card-title>
                 <v-card-subtitle>₱45</v-card-subtitle>
                 <v-card-actions>
                   <v-btn
-                    color="primary"
+                    color="white"
+                    style="background-color: brown"
                     @click="(openDialog({ quantity: 3, price: 45 }), (dialog2 = true))"
                     block
                     >Purchase</v-btn
@@ -200,13 +197,14 @@ function openDialog(product) {
             </v-col>
 
             <v-col cols="12" sm="6" md="3">
-              <v-card class="text-center py-4" style="background-color: lightblue" elevation="2">
+              <v-card class="text-center py-4 sidebar-bg" elevation="2">
                 <v-img :src="fourgallons" height="150px" cover></v-img>
                 <v-card-title>4 Gallons</v-card-title>
                 <v-card-subtitle>₱60</v-card-subtitle>
                 <v-card-actions>
                   <v-btn
-                    color="primary"
+                    color="white"
+                    style="background-color: brown"
                     @click="(openDialog({ quantity: 4, price: 60 }), (dialog3 = true))"
                     block
                     >Purchase</v-btn
@@ -444,10 +442,9 @@ function openDialog(product) {
   box-sizing: border-box;
 }
 
-.dashboard-bg {
-  background: url('/src/assets/bg-water.jpg') no-repeat center center;
-  background-size: cover;
-  height: 100vh;
+.sidebar-bg {
+  background: linear-gradient(310deg, blue, lightblue);
+  background-size: 300% 300%;
 }
 
 .special-gothic-expanded-one-regular {
