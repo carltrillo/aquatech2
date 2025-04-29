@@ -1,13 +1,25 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { requiredValidator } from '@/utils/validators.js'
 import aqlogo from '@/assets/aqlogo.jpg'
 
+const router = useRouter()
+const form = ref(null)
 const user = ref('')
 const password = ref('')
 const showPassword = ref(false)
 
-const login = () => {}
+const login = async () => {
+  const { valid } = await form.value.validate()
 
+  if (valid) {
+    console.log('Logging in with:', user.value, password.value)
+    router.push('/customer_dashboard')
+  } else {
+    console.log('Form is invalid. Fix errors.')
+  }
+}
 const loginWithGoogle = () => {}
 </script>
 
@@ -43,8 +55,15 @@ const loginWithGoogle = () => {}
               Enter your account to access
             </v-card-subtitle>
 
-            <v-form @submit.prevent="login">
-              <v-text-field label="Username" v-model="user" type="text" dense outlined required />
+            <v-form ref="form" @submit.prevent="login">
+              <v-text-field
+                label="Username"
+                v-model="user"
+                type="text"
+                dense
+                outlined
+                :rules="[requiredValidator]"
+              />
 
               <v-text-field
                 label="Password"
@@ -52,19 +71,12 @@ const loginWithGoogle = () => {}
                 :type="showPassword ? 'text' : 'password'"
                 dense
                 outlined
-                required
+                :rules="[requiredValidator]"
                 :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                 @click:append-inner="showPassword = !showPassword"
               />
 
-              <v-btn
-                type="submit"
-                color="blue-darken-1"
-                block
-                class="mb-3 text-white"
-                height="48"
-                to="/customer_dashboard"
-              >
+              <v-btn type="submit" color="blue-darken-1" block class="mb-3 text-white" height="48">
                 Login
               </v-btn>
             </v-form>

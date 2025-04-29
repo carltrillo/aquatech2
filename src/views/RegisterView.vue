@@ -2,12 +2,61 @@
 import { ref } from 'vue'
 import aqlogo from '@/assets/aqlogo.jpg'
 
+import {
+  requiredValidator,
+  passwordValidator,
+  fullNameValidator, // newly added validator
+} from '@/utils/validators.js'
+
 const fullname = ref('')
 const user = ref('')
 const password = ref('')
 
+const fullnameError = ref('')
+const userError = ref('')
+const passwordError = ref('')
+
+const validateForm = () => {
+  let isValid = true
+
+  // Fullname validation
+  const fullNameValidation = fullNameValidator(fullname.value)
+  if (fullNameValidation !== true) {
+    fullnameError.value = fullNameValidation
+    isValid = false
+  } else {
+    fullnameError.value = ''
+  }
+
+  // Username validation (just required)
+  const usernameValidation = requiredValidator(user.value)
+  if (usernameValidation !== true) {
+    userError.value = usernameValidation
+    isValid = false
+  } else {
+    userError.value = ''
+  }
+
+  // Password validation
+  const passwordValidation = passwordValidator(password.value)
+  if (passwordValidation !== true) {
+    passwordError.value = passwordValidation
+    isValid = false
+  } else {
+    passwordError.value = ''
+  }
+
+  return isValid
+}
+
 const register = () => {
-  alert(`Account created successfully! You can now login`)
+  if (validateForm()) {
+    alert('Account created successfully! You can now login')
+    // You can optionally reset the fields here if you want
+    fullname.value = ''
+    user.value = ''
+    password.value = ''
+  }
 }
 </script>
 
@@ -43,13 +92,30 @@ const register = () => {
               <v-text-field
                 label="Fullname"
                 v-model="fullname"
+                :error-messages="fullnameError"
                 type="text"
                 dense
                 outlined
                 required
               />
-              <v-text-field label="Username" v-model="user" type="text" dense outlined required />
-              <v-text-field label="Password" v-model="password" type="" dense outlined required />
+              <v-text-field
+                label="Username"
+                v-model="user"
+                :error-messages="userError"
+                type="text"
+                dense
+                outlined
+                required
+              />
+              <v-text-field
+                label="Password"
+                v-model="password"
+                :error-messages="passwordError"
+                type="password"
+                dense
+                outlined
+                required
+              />
 
               <v-btn type="submit" color="green-darken-1" block class="mb-3 text-white" height="48">
                 Register
