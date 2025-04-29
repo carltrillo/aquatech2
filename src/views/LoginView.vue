@@ -1,26 +1,64 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { requiredValidator } from '@/utils/validators.js'
 import aqlogo from '@/assets/aqlogo.jpg'
+import { supabase } from '@/utils/supabase.js'
+import { useRouter } from 'vue-router'
+import { emailValidator, passwordValidator } from '@/utils/validators.js'
 
 const router = useRouter()
-const form = ref(null)
-const user = ref('')
+
+const email = ref('')
 const password = ref('')
+
+const emailError = ref('')
+const passwordError = ref('')
+
 const showPassword = ref(false)
 
-const login = async () => {
-  const { valid } = await form.value.validate()
+const validateForm = () => {
+  let isValid = true
 
-  if (valid) {
-    console.log('Logging in with:', user.value, password.value)
-    router.push('/customer_dashboard')
+  // Email validation (just required)
+  const emailValidation = emailValidator(email.value)
+  if (emailValidation !== true) {
+    emailError.value = emailValidation
+    isValid = false
   } else {
-    console.log('Form is invalid. Fix errors.')
+    emailError.value = ''
+  }
+
+  // Password validation
+  const passwordValidation = passwordValidator(password.value)
+  if (passwordValidation !== true) {
+    passwordError.value = passwordValidation
+    isValid = false
+  } else {
+    passwordError.value = ''
+  }
+
+  return isValid
+}
+
+const login = async () => {
+  // First validate the form
+  const isValid = validateForm()
+  if (!isValid) return // stop if invalid
+
+  // Then try to sign up
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  })
+
+  if (error) {
+    alert(`Error: ${error.message}`)
+  } else {
+    alert('Login Successful')
+    email.value = ''
+    password.value = ''
+    router.replace('/customer_dashboard')
   }
 }
-const loginWithGoogle = () => {}
 </script>
 
 <template>
@@ -57,12 +95,13 @@ const loginWithGoogle = () => {}
 
             <v-form ref="form" @submit.prevent="login">
               <v-text-field
-                label="Username"
-                v-model="user"
+                label="Email"
+                v-model="email"
+                :error-messages="emailError"
                 type="text"
                 dense
                 outlined
-                :rules="[requiredValidator]"
+                required
               />
 
               <v-text-field
@@ -71,9 +110,9 @@ const loginWithGoogle = () => {}
                 :type="showPassword ? 'text' : 'password'"
                 dense
                 outlined
-                :rules="[requiredValidator]"
                 :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                 @click:append-inner="showPassword = !showPassword"
+                :error-messages="passwordError"
               />
 
               <v-btn type="submit" color="blue-darken-1" block class="mb-3 text-white" height="48">
@@ -83,11 +122,11 @@ const loginWithGoogle = () => {}
 
             <v-btn color="white" block class="mb-3 text-black" height="48" @click="loginWithGoogle">
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Google-g-icon.png"
-                alt="Google Logo"
+                src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+                alt="Facebook Logo"
                 style="width: 30px; height: 30px; margin-right: 10px"
               />
-              Login with Google
+              Login with Facebook
             </v-btn>
 
             <div class="mt-5 text-center text-body-2">

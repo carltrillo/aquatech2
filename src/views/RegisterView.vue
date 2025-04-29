@@ -3,14 +3,10 @@ import { ref } from 'vue'
 import aqlogo from '@/assets/aqlogo.jpg'
 import { supabase } from '@/utils/supabase.js'
 import { useRouter } from 'vue-router'
-
-import {
-  emailValidator,
-  passwordValidator,
-  fullNameValidator, // newly added validator
-} from '@/utils/validators.js'
+import { emailValidator, passwordValidator, fullNameValidator } from '@/utils/validators.js'
 
 const router = useRouter()
+
 const fullname = ref('')
 const email = ref('')
 const password = ref('')
@@ -18,6 +14,8 @@ const password = ref('')
 const fullnameError = ref('')
 const emailError = ref('')
 const passwordError = ref('')
+
+const showPassword = ref(false)
 
 const validateForm = () => {
   let isValid = true
@@ -130,11 +128,12 @@ const register = async () => {
               <v-text-field
                 label="Password"
                 v-model="password"
-                :error-messages="passwordError"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
                 dense
                 outlined
-                required
+                :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append-inner="showPassword = !showPassword"
+                :error-messages="passwordError"
               />
 
               <v-btn type="submit" color="green-darken-1" block class="mb-3 text-white" height="48">
@@ -149,11 +148,11 @@ const register = async () => {
                 @click="loginWithGoogle"
               >
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Google-g-icon.png"
-                  alt="Google Logo"
+                  src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+                  alt="Facebook Logo"
                   style="width: 30px; height: 30px; margin-right: 10px"
                 />
-                Login with Google
+                Login with Facebook
               </v-btn>
             </v-form>
           </v-card>
