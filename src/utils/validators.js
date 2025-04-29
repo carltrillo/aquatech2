@@ -21,10 +21,6 @@ export const isEmptyArray = (arr) => {
   return Array.isArray(arr) && arr.length === 0
 }
 
-// 👉 IsObject
-export const isObject = (obj) =>
-  obj !== null && !!obj && typeof obj === 'object' && !Array.isArray(obj)
-
 // 👉 Required Validator
 export const requiredValidator = (value) => {
   if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
@@ -35,14 +31,18 @@ export const requiredValidator = (value) => {
 
 // 👉 Email Validator
 export const emailValidator = (value) => {
-  if (isEmpty(value)) return true
+  if (!value || value.trim() === '') {
+    return 'Email field is required'
+  }
 
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  if (Array.isArray(value))
+
+  if (Array.isArray(value)) {
     return (
       value.every((val) => re.test(String(val))) || 'The Email field must be a valid email address'
     )
+  }
 
   return re.test(String(value)) || 'The Email field must be a valid email address'
 }

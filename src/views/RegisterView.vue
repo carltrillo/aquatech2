@@ -1,19 +1,22 @@
 <script setup>
 import { ref } from 'vue'
 import aqlogo from '@/assets/aqlogo.jpg'
+import { supabase } from '@/utils/supabase.js'
+import { useRouter } from 'vue-router'
 
 import {
-  requiredValidator,
+  emailValidator,
   passwordValidator,
   fullNameValidator, // newly added validator
 } from '@/utils/validators.js'
 
+const router = useRouter()
 const fullname = ref('')
-const user = ref('')
+const email = ref('')
 const password = ref('')
 
 const fullnameError = ref('')
-const userError = ref('')
+const emailError = ref('')
 const passwordError = ref('')
 
 const validateForm = () => {
@@ -28,13 +31,13 @@ const validateForm = () => {
     fullnameError.value = ''
   }
 
-  // Username validation (just required)
-  const usernameValidation = requiredValidator(user.value)
-  if (usernameValidation !== true) {
-    userError.value = usernameValidation
+  // Email validation (just required)
+  const emailValidation = emailValidator(email.value)
+  if (emailValidation !== true) {
+    emailError.value = emailValidation
     isValid = false
   } else {
-    userError.value = ''
+    emailError.value = ''
   }
 
   // Password validation
@@ -49,13 +52,30 @@ const validateForm = () => {
   return isValid
 }
 
-const register = () => {
-  if (validateForm()) {
+const register = async () => {
+  // First validate the form
+  const isValid = validateForm()
+  if (!isValid) return // stop if invalid
+
+  // Then try to sign up
+  const { error } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value,
+    options: {
+      data: {
+        full_name: fullname.value,
+      },
+    },
+  })
+
+  if (error) {
+    alert(`Error: ${error.message}`)
+  } else {
     alert('Account created successfully! You can now login')
-    // You can optionally reset the fields here if you want
     fullname.value = ''
-    user.value = ''
+    email.value = ''
     password.value = ''
+    router.replace('/customer_dashboard')
   }
 }
 </script>
@@ -90,7 +110,7 @@ const register = () => {
 
             <v-form @submit.prevent="register">
               <v-text-field
-                label="Fullname"
+                label="Full Name (2 words only)"
                 v-model="fullname"
                 :error-messages="fullnameError"
                 type="text"
@@ -99,9 +119,9 @@ const register = () => {
                 required
               />
               <v-text-field
-                label="Username"
-                v-model="user"
-                :error-messages="userError"
+                label="Email"
+                v-model="email"
+                :error-messages="emailError"
                 type="text"
                 dense
                 outlined
