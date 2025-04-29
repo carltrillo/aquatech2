@@ -40,8 +40,8 @@ async function uploadAvatar(event) {
       <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
         <v-row class="justify-center align-start" style="min-height: 100vh">
           <!-- Sidebar (unchanged) -->
-          <v-col v-show="showSidebar || $vuetify.display.mdAndUp">
-            <v-list style="min-height: 97vh" class="sidebar-border sidebar-bg" nav dense fluid>
+          <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
+            <v-list style="max-width: 335px" class="sidebar-border sidebar-bg" nav dense fluid>
               <v-list-item
                 style="background-color: white"
                 prepend-icon="mdi-bottle-tonic"
@@ -101,7 +101,7 @@ async function uploadAvatar(event) {
           <v-col cols="12" md="9">
             <v-row class="mb-3">
               <v-col cols="12" class="d-flex justify-space-between align-center">
-                <v-btn icon @click="showSidebar = !showSidebar" class="d-md-none">
+                <v-btn icon @click="showSidebar = !showSidebar" class="d-lg-none">
                   <v-icon>mdi-menu</v-icon>
                 </v-btn>
 
