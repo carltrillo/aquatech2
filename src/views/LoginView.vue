@@ -45,15 +45,14 @@ const login = async () => {
   if (!isValid) return // stop if invalid
 
   // Then try to sign up
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error, data } = await supabase.auth.signInWithPassword({
     email: email.value,
     password: password.value,
   })
 
   if (error) {
     alert(`Error: ${error.message}`)
-  } else {
-    alert('Login Successful')
+  } else if (data) {
     email.value = ''
     password.value = ''
     router.replace('/customer_dashboard')

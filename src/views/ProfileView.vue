@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { supabase } from '@/utils/supabase.js' // adjust this path if needed
+import { passwordValidator } from '@/utils/validators'
 
 const dialog = ref(false)
 const dialog1 = ref(false)
@@ -36,14 +37,48 @@ onMounted(async () => {
   }
 })
 
-function changeName() {
-  alert(`Name change success!`)
-  dialog.value = false
+async function changeName() {
+  if (!name.value.trim()) {
+    alert('Please enter a name.')
+    return
+  }
+
+  const { data, error } = await supabase.auth.updateUser({
+    data: {
+      full_name: name.value,
+    },
+  })
+
+  if (error) {
+    alert('Failed to update name.')
+    console.error(error)
+  } else if (data) {
+    fullName.value = name.value
+    alert('Name change success!')
+    dialog.value = false
+  }
 }
 
-function changePass() {
-  alert(`Password change success!`)
-  dialog1.value = false
+async function changePass() {
+  const validation = passwordValidator(pass.value)
+
+  if (validation !== true) {
+    alert(validation)
+    return
+  }
+
+  const { data, error } = await supabase.auth.updateUser({
+    password: pass.value,
+  })
+
+  if (error) {
+    alert('Failed to update password.')
+    console.error(error)
+  } else if (data) {
+    alert('Password change success!')
+    dialog1.value = false
+    pass.value = ''
+  }
 }
 
 async function uploadAvatar(event) {
@@ -277,7 +312,7 @@ async function uploadAvatar(event) {
                         >Are you sure you want to signout?</v-card-subtitle
                       >
                       <div class="mt-6">
-                        <v-btn color="blue" class="text-white" to="/" block> Sign Out </v-btn>
+                        <v-btn color="blue" class="text-white" to="/logout" block> Sign Out </v-btn>
                       </div>
                     </v-card-title>
                   </v-card>
