@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import userpic from '@/assets/userpic.jpg'
+import { ref, onMounted, computed } from 'vue'
+import { supabase } from '@/utils/supabase'
 import twogallons from '@/assets/twogallons.jpg'
 import fivegallons from '@/assets/fivegallons.jpg'
 
@@ -13,6 +13,7 @@ const dialog3 = ref(false)
 const location = ref('')
 const quantity = ref(1)
 const pricePerGallon = 15
+
 const showSidebar = ref(false)
 
 const notifications = ref([]) // <-- NEW: store order notifications
@@ -38,6 +39,31 @@ function placeOrder() {
 function openDialog(product) {
   selectedProduct.value = product
 }
+
+const fullName = ref('User')
+const avatarUrl = ref(null)
+
+const initials = computed(() => {
+  return fullName.value
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+})
+
+onMounted(async () => {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+  if (user && user.user_metadata) {
+    fullName.value = user.user_metadata.full_name || 'User'
+    avatarUrl.value = user.user_metadata.avatar_url || null
+  }
+  if (error) {
+    console.log(error)
+  }
+})
 </script>
 
 <template>
@@ -46,7 +72,7 @@ function openDialog(product) {
       <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
         <v-row class="justify-center align-start" style="min-height: 100vh">
           <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
-            <v-list style="max-width: 335px" class="sidebar-border sidebar-bg" nav dense fluid>
+            <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
               <v-list-item
                 style="background-color: white"
                 prepend-icon="mdi-bottle-tonic"
@@ -122,17 +148,22 @@ function openDialog(product) {
                   </v-badge>
                   <v-icon v-else @click="dialog3 = true">mdi-bell</v-icon>
                   <router-link to="/profile_dashboard">
-                    <v-avatar size="35">
-                      <img
-                        :src="userpic"
-                        alt="User"
-                        style="
-                          object-fit: cover;
-                          object-position: center;
-                          width: 100%;
-                          height: 100%;
-                        "
-                      />
+                    <v-avatar size="40" style="background-color: orange">
+                      <template v-if="avatarUrl">
+                        <img
+                          :src="avatarUrl"
+                          alt="User"
+                          style="
+                            object-fit: cover;
+                            object-position: center;
+                            width: 100%;
+                            height: 100%;
+                          "
+                        />
+                      </template>
+                      <template v-else>
+                        <span class="text-h5">{{ initials }}</span>
+                      </template>
                     </v-avatar>
                   </router-link>
                 </div>

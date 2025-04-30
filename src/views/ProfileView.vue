@@ -1,15 +1,40 @@
 <script setup>
-import { ref } from 'vue'
-import userpic from '@/assets/userpic.jpg'
+import { ref, computed, onMounted } from 'vue'
+import { supabase } from '@/utils/supabase.js' // adjust this path if needed
 
-const confirm = ref('')
 const dialog = ref(false)
 const dialog1 = ref(false)
 const dialog2 = ref(false)
 
 const name = ref('')
 const pass = ref('')
+const confirm = ref('')
 const showSidebar = ref(false)
+
+const fullName = ref('User')
+const avatarUrl = ref(null)
+
+const initials = computed(() => {
+  return fullName.value
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+})
+
+onMounted(async () => {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+  if (user && user.user_metadata) {
+    fullName.value = user.user_metadata.full_name || 'User'
+    avatarUrl.value = user.user_metadata.avatar_url || null
+  }
+  if (error) {
+    console.log(error)
+  }
+})
 
 function changeName() {
   alert(`Name change success!`)
@@ -25,10 +50,9 @@ async function uploadAvatar(event) {
   const file = event.target.files[0]
   if (!file) return
 
-  // if you want just local preview:
   const reader = new FileReader()
   reader.onload = () => {
-    userpic.value = reader.result
+    avatarUrl.value = reader.result
   }
   reader.readAsDataURL(file)
 }
@@ -41,7 +65,7 @@ async function uploadAvatar(event) {
         <v-row class="justify-center align-start" style="min-height: 100vh">
           <!-- Sidebar (unchanged) -->
           <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
-            <v-list style="max-width: 335px" class="sidebar-border sidebar-bg" nav dense fluid>
+            <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
               <v-list-item
                 style="background-color: white"
                 prepend-icon="mdi-bottle-tonic"
@@ -111,17 +135,22 @@ async function uploadAvatar(event) {
                 <div class="d-flex align-center gap-2">
                   <v-icon>mdi-bell</v-icon>
                   <router-link to="/profile_dashboard">
-                    <v-avatar size="35">
-                      <img
-                        :src="userpic"
-                        alt="User"
-                        style="
-                          object-fit: cover;
-                          object-position: center;
-                          width: 100%;
-                          height: 100%;
-                        "
-                      />
+                    <v-avatar size="40" style="background-color: orange">
+                      <template v-if="avatarUrl">
+                        <img
+                          :src="avatarUrl"
+                          alt="User"
+                          style="
+                            object-fit: cover;
+                            object-position: center;
+                            width: 100%;
+                            height: 100%;
+                          "
+                        />
+                      </template>
+                      <template v-else>
+                        <span class="text-h5">{{ initials }}</span>
+                      </template>
                     </v-avatar>
                   </router-link>
                 </div>
@@ -140,20 +169,25 @@ async function uploadAvatar(event) {
                       @change="uploadAvatar"
                       style="display: none"
                     />
-                    <v-avatar size="100" class="mb-4">
-                      <img
-                        :src="userpic"
-                        alt="Profile Picture"
-                        style="
-                          object-fit: cover;
-                          object-position: center;
-                          width: 100%;
-                          height: 100%;
-                        "
-                      />
+                    <v-avatar size="100" class="mb-4" style="background-color: orange">
+                      <template v-if="avatarUrl">
+                        <img
+                          :src="avatarUrl"
+                          alt="Profile Picture"
+                          style="
+                            object-fit: cover;
+                            object-position: center;
+                            width: 100%;
+                            height: 100%;
+                          "
+                        />
+                      </template>
+                      <template v-else>
+                        <span class="text-h5">{{ initials }}</span>
+                      </template>
                     </v-avatar>
                   </label>
-                  <h3 class="text-h6 mb-1">Jason Momoa</h3>
+                  <h3 class="text-h6 mb-1">{{ fullName }}</h3>
                   <p class="text-caption mb-4">Customer</p>
 
                   <div class="d-flex justify-center mt-4 gap-2">
@@ -170,15 +204,15 @@ async function uploadAvatar(event) {
                 <v-col cols="12" md="8">
                   <v-row>
                     <v-col cols="4" class="text-center mt-10">
-                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">5</h4>
+                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">0</h4>
                       <p class="text-caption d-flex justify-center">Total Purchase</p>
                     </v-col>
                     <v-col cols="4" class="text-center mt-10">
-                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">₱100</h4>
+                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">₱0</h4>
                       <p class="text-caption d-flex justify-center">Money Saved</p>
                     </v-col>
                     <v-col cols="4" class="text-center mt-10">
-                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">1</h4>
+                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">0</h4>
                       <p class="text-caption d-flex justify-center">Voucher Available</p>
                     </v-col>
                   </v-row>
