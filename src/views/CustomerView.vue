@@ -16,8 +16,11 @@ const dialog4 = ref(false)
 const dialog5 = ref(false)
 const dialog6 = ref(false)
 
-const location = ref('')
-const quantity = ref(1)
+const fullName = ref('User')
+const contactNum = ref('')
+const avatarUrl = ref(null)
+const address = ref('')
+const quantity = ref(0)
 
 const showSidebar = ref(false)
 
@@ -27,32 +30,9 @@ const totalPrice = computed(() => quantity.value * pricePerGallon)
 const notifications = ref([]) // <-- NEW: store order notifications
 const selectedProduct = ref({ quantity: 1, price: 15 }) // <-- NEW: to store selected product info
 
-function placeOrder() {
-  notifications.value.push({
-    location: location.value,
-    quantity: selectedProduct.value.quantity ?? quantity.value, // Use selected quantity OR custom quantity
-    totalAmount: selectedProduct.value.price ?? quantity.value * pricePerGallon, // Use selected price OR custom total
-    time: new Date().toLocaleTimeString(), // optional, to show time
-  })
-
-  // Reset after order
-  location.value = ''
-  quantity.value = 1
-  dialog.value = false
-  dialog1.value = false
-  dialog2.value = false
-  dialog3.value = false
-  dialog4.value = false
-  dialog5.value = false
-  dialog6.value = false
-}
-
 function openDialog(product) {
   selectedProduct.value = product
 }
-
-const fullName = ref('User')
-const avatarUrl = ref(null)
 
 const initials = computed(() => {
   return fullName.value
@@ -75,6 +55,38 @@ onMounted(async () => {
     console.log(error)
   }
 })
+
+async function orderPlaced() {
+  const { error } = await supabase.from('orders').insert({
+    quantity: selectedProduct.value.quantity,
+    full_name: fullName.value,
+    address: address.value,
+    contact_number: contactNum.value,
+    total_price: selectedProduct.value.price ?? 0,
+  })
+
+  if (error) {
+    console.error('Failed to place order:', error.message)
+  } else {
+    console.log('Order placed successfully!')
+  }
+
+  notifications.value.push({
+    address: address.value,
+    quantity: selectedProduct.value.quantity ?? quantity.value, // Use selected quantity OR custom quantity
+    totalAmount: selectedProduct.value.price ?? quantity.value * pricePerGallon, // Use selected price OR custom total
+    time: new Date().toLocaleTimeString(), // optional, to show time
+  })
+
+  // Reset after order
+  address.value = ''
+  contactNum.value = ''
+  quantity.value = 1
+  dialog.value = false
+  dialog1.value = false
+  dialog2.value = false
+  dialog3.value = false
+}
 </script>
 
 <template>
@@ -252,13 +264,6 @@ onMounted(async () => {
                 </v-card>
               </v-col>
 
-              <v-btn
-                color="primary"
-                class="mt-2"
-                @click="(openDialog({ quantity: 4, price: 60 }), (dialog5 = true))"
-                >Custom Purchase</v-btn
-              >
-
               <v-dialog v-model="dialog" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
@@ -269,8 +274,17 @@ onMounted(async () => {
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
+                      outlined
+                      dense
+                      hide-details
+                    ></v-text-field>
+
+                    <v-text-field
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
                       outlined
                       dense
                       hide-details
@@ -282,7 +296,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱15.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>
@@ -300,8 +314,17 @@ onMounted(async () => {
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
+                      outlined
+                      dense
+                      hide-details
+                    ></v-text-field>
+
+                    <v-text-field
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
                       outlined
                       dense
                       hide-details
@@ -313,7 +336,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱30.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>
@@ -331,8 +354,17 @@ onMounted(async () => {
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
+                      outlined
+                      dense
+                      hide-details
+                    ></v-text-field>
+
+                    <v-text-field
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
                       outlined
                       dense
                       hide-details
@@ -344,7 +376,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱45.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>
@@ -362,8 +394,17 @@ onMounted(async () => {
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
+                      outlined
+                      dense
+                      hide-details
+                    ></v-text-field>
+
+                    <v-text-field
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
                       outlined
                       dense
                       hide-details
@@ -375,7 +416,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱60.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>
@@ -417,8 +458,17 @@ onMounted(async () => {
                     ></v-text-field>
 
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
+                      outlined
+                      dense
+                      hide-details
+                    ></v-text-field>
+
+                    <v-text-field
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
                       outlined
                       dense
                       hide-details
@@ -430,7 +480,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱{{ totalPrice.toFixed(2) }}</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>

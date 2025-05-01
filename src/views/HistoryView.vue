@@ -147,6 +147,7 @@ onMounted(async () => {
                     <v-icon @click="dialog3 = true">mdi-bell</v-icon>
                   </v-badge>
                   <v-icon v-else @click="dialog3 = true">mdi-bell</v-icon>
+
                   <router-link to="/profile_dashboard">
                     <v-avatar size="40" style="background-color: orange">
                       <template v-if="avatarUrl">
