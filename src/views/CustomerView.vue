@@ -42,18 +42,43 @@ const initials = computed(() => {
     .toUpperCase()
 })
 
-onMounted(async () => {
+async function fetchOrders() {
   const {
     data: { user },
-    error,
+    error: userError,
   } = await supabase.auth.getUser()
-  if (user && user.user_metadata) {
-    fullName.value = user.user_metadata.full_name || 'User'
-    avatarUrl.value = user.user_metadata.avatar_url || null
+
+  if (userError) {
+    console.error('Error fetching user:', userError)
+    return
   }
-  if (error) {
-    console.log(error)
+
+  fullName.value = user.user_metadata.full_name || 'User'
+  avatarUrl.value = user.user_metadata.avatar_url || null
+
+  const { data: orders, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('full_name', fullName.value) // or use a user_id if available
+    .order('created_at', { ascending: false })
+
+  if (orderError) {
+    console.error('Error fetching orders:', orderError)
+  } else {
+    notifications.value = orders.map((order) => ({
+      location: order.address,
+      quantity: order.quantity,
+      totalAmount: order.total_price,
+      time: new Date(order.created_at).toLocaleTimeString(),
+    }))
   }
+}
+
+onMounted(() => {
+  fetchOrders()
+
+  // Optional: Poll every 10 seconds for updates
+  setInterval(fetchOrders, 10000)
 })
 
 async function orderPlaced() {
@@ -81,7 +106,6 @@ async function orderPlaced() {
   // Reset after order
   address.value = ''
   contactNum.value = ''
-  quantity.value = 1
   dialog.value = false
   dialog1.value = false
   dialog2.value = false
@@ -128,7 +152,7 @@ async function orderPlaced() {
                 style="background-color: white"
                 prepend-icon="mdi-history"
               >
-                Buy Again
+                History
               </v-list-item>
 
               <v-list-item

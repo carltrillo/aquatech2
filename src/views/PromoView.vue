@@ -14,7 +14,10 @@ const dialog3 = ref(false)
 const dialog4 = ref(false)
 const dialog5 = ref(false)
 
-const location = ref('')
+const fullName = ref('User')
+const avatarUrl = ref(null)
+const contactNum = ref('')
+const address = ref('')
 const quantity = ref(1)
 
 const pricePerGallon = 15
@@ -23,30 +26,9 @@ const showSidebar = ref(false)
 const notifications = ref([]) // <-- NEW: store order notifications
 const selectedProduct = ref({ quantity: 1, price: 15 }) // <-- NEW: to store selected product info
 
-function placeOrder() {
-  notifications.value.push({
-    location: location.value,
-    quantity: selectedProduct.value.quantity ?? quantity.value, // Use selected quantity OR custom quantity
-    totalAmount: selectedProduct.value.price ?? quantity.value * pricePerGallon, // Use selected price OR custom total
-    time: new Date().toLocaleTimeString(), // optional, to show time
-  })
-
-  // Reset after order
-  location.value = ''
-  quantity.value = 1
-  dialog.value = false
-  dialog1.value = false
-  dialog2.value = false
-  dialog3.value = false
-  dialog4.value = false
-}
-
 function openDialog(product) {
   selectedProduct.value = product
 }
-
-const fullName = ref('User')
-const avatarUrl = ref(null)
 
 const initials = computed(() => {
   return fullName.value
@@ -56,19 +38,75 @@ const initials = computed(() => {
     .toUpperCase()
 })
 
-onMounted(async () => {
+async function fetchOrders() {
   const {
     data: { user },
-    error,
+    error: userError,
   } = await supabase.auth.getUser()
-  if (user && user.user_metadata) {
-    fullName.value = user.user_metadata.full_name || 'User'
-    avatarUrl.value = user.user_metadata.avatar_url || null
+
+  if (userError) {
+    console.error('Error fetching user:', userError)
+    return
   }
-  if (error) {
-    console.log(error)
+
+  fullName.value = user.user_metadata.full_name || 'User'
+  avatarUrl.value = user.user_metadata.avatar_url || null
+
+  const { data: orders, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('full_name', fullName.value) // or use a user_id if available
+    .order('created_at', { ascending: false })
+
+  if (orderError) {
+    console.error('Error fetching orders:', orderError)
+  } else {
+    notifications.value = orders.map((order) => ({
+      location: order.address,
+      quantity: order.quantity,
+      totalAmount: order.total_price,
+      time: new Date(order.created_at).toLocaleTimeString(),
+    }))
   }
+}
+
+onMounted(() => {
+  fetchOrders()
+
+  // Optional: Poll every 10 seconds for updates
+  setInterval(fetchOrders, 10000)
 })
+
+async function orderPlaced() {
+  const { error } = await supabase.from('orders').insert({
+    quantity: selectedProduct.value.quantity,
+    full_name: fullName.value,
+    address: address.value,
+    contact_number: contactNum.value,
+    total_price: selectedProduct.value.price ?? 0,
+  })
+
+  if (error) {
+    console.error('Failed to place order:', error.message)
+  } else {
+    console.log('Order placed successfully!')
+  }
+
+  notifications.value.push({
+    address: address.value,
+    quantity: selectedProduct.value.quantity ?? quantity.value, // Use selected quantity OR custom quantity
+    totalAmount: selectedProduct.value.price ?? quantity.value * pricePerGallon, // Use selected price OR custom total
+    time: new Date().toLocaleTimeString(), // optional, to show time
+  })
+
+  // Reset after order
+  address.value = ''
+  contactNum.value = ''
+  dialog.value = false
+  dialog1.value = false
+  dialog2.value = false
+  dialog3.value = false
+}
 </script>
 
 <template>
@@ -110,7 +148,7 @@ onMounted(async () => {
                 style="background-color: white"
                 prepend-icon="mdi-history"
               >
-                Buy Again
+               History
               </v-list-item>
 
               <v-list-item
@@ -255,12 +293,21 @@ onMounted(async () => {
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
                       outlined
                       dense
                       hide-details
                     ></v-text-field>
+
+                    <v-text-field
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
+                      outlined
+                      dense
+                      hide-details
+                      ></v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
@@ -268,7 +315,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱25.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>
@@ -286,12 +333,21 @@ onMounted(async () => {
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
                       outlined
                       dense
                       hide-details
                     ></v-text-field>
+
+                    <v-text-field
+                                          v-model="contactNum"
+                                          label="Enter Contact Number"
+                                          class="mt-2"
+                                          outlined
+                                          dense
+                                          hide-details
+                                        ></v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
@@ -299,7 +355,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱40.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>
@@ -317,12 +373,21 @@ onMounted(async () => {
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
                       outlined
                       dense
                       hide-details
                     ></v-text-field>
+
+                    <v-text-field
+                                          v-model="contactNum"
+                                          label="Enter Contact Number"
+                                          class="mt-2"
+                                          outlined
+                                          dense
+                                          hide-details
+                                        ></v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
@@ -330,7 +395,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱50.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>
@@ -348,12 +413,21 @@ onMounted(async () => {
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
                       outlined
                       dense
                       hide-details
                     ></v-text-field>
+
+                    <v-text-field
+                                          v-model="contactNum"
+                                          label="Enter Contact Number"
+                                          class="mt-2"
+                                          outlined
+                                          dense
+                                          hide-details
+                                        ></v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
@@ -361,7 +435,7 @@ onMounted(async () => {
                         <span class="font-weight-bold">₱65.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>

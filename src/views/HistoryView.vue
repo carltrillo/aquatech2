@@ -1,47 +1,16 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/utils/supabase'
-import twogallons from '@/assets/twogallons.jpg'
-import fivegallons from '@/assets/fivegallons.jpg'
 
 const confirm = ref('')
-const dialog = ref(false)
-const dialog1 = ref(false)
+
 const dialog2 = ref(false)
 const dialog3 = ref(false)
 
-const location = ref('')
-const quantity = ref(1)
-const pricePerGallon = 15
-
-const showSidebar = ref(false)
-
-const notifications = ref([]) // <-- NEW: store order notifications
-const selectedProduct = ref({ quantity: 1, price: 15 }) // <-- NEW: to store selected product info
-
-function placeOrder() {
-  notifications.value.push({
-    location: location.value,
-    quantity: selectedProduct.value.quantity ?? quantity.value, // Use selected quantity OR custom quantity
-    totalAmount: selectedProduct.value.price ?? quantity.value * pricePerGallon, // Use selected price OR custom total
-    time: new Date().toLocaleTimeString(), // optional, to show time
-  })
-
-  // Reset after order
-  location.value = ''
-  quantity.value = 1
-  dialog.value = false
-  dialog1.value = false
-  dialog2.value = false
-  dialog3.value = false
-}
-
-function openDialog(product) {
-  selectedProduct.value = product
-}
-
 const fullName = ref('User')
 const avatarUrl = ref(null)
+const notifications = ref([])
+const showSidebar = ref(false)
 
 const initials = computed(() => {
   return fullName.value
@@ -51,18 +20,44 @@ const initials = computed(() => {
     .toUpperCase()
 })
 
-onMounted(async () => {
+// Fetch orders from Supabase
+async function fetchOrders() {
   const {
     data: { user },
-    error,
+    error: userError,
   } = await supabase.auth.getUser()
-  if (user && user.user_metadata) {
-    fullName.value = user.user_metadata.full_name || 'User'
-    avatarUrl.value = user.user_metadata.avatar_url || null
+
+  if (userError) {
+    console.error('Error fetching user:', userError)
+    return
   }
-  if (error) {
-    console.log(error)
+
+  fullName.value = user.user_metadata.full_name || 'User'
+  avatarUrl.value = user.user_metadata.avatar_url || null
+
+  const { data: orders, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('full_name', fullName.value) // or use a user_id if available
+    .order('created_at', { ascending: false })
+
+  if (orderError) {
+    console.error('Error fetching orders:', orderError)
+  } else {
+    notifications.value = orders.map((order) => ({
+      location: order.address,
+      quantity: order.quantity,
+      totalAmount: order.total_price,
+      time: new Date(order.created_at).toLocaleTimeString(),
+    }))
   }
+}
+
+onMounted(() => {
+  fetchOrders()
+
+  // Optional: Poll every 10 seconds for updates
+  setInterval(fetchOrders, 10000)
 })
 </script>
 
@@ -105,7 +100,7 @@ onMounted(async () => {
                 style="background-color: white"
                 prepend-icon="mdi-history"
               >
-                Buy Again
+              History
               </v-list-item>
 
               <v-list-item
@@ -136,7 +131,7 @@ onMounted(async () => {
                 </v-btn>
 
                 <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: #344cb7">
-                  Buy Again
+                  History
                 </h2>
                 <div class="d-flex align-center gap-2">
                   <v-badge
@@ -172,95 +167,59 @@ onMounted(async () => {
             </v-row>
             <v-divider class=""></v-divider>
             <v-row class="d-flex justify-center align-center mt-2">
-              <v-col cols="12" sm="6" md="3">
-                <v-card class="text-center py-4 sidebar-bg" elevation="2">
-                  <v-img :src="twogallons" height="150px" cover></v-img>
-                  <v-card-title>2 Gallons</v-card-title>
-                  <v-card-subtitle>₱30</v-card-subtitle>
-                  <v-card-actions>
-                    <v-btn
-                      color="white"
-                      style="background-color: brown"
-                      @click="(openDialog({ quantity: 2, price: 30 }), (dialog = true))"
-                      block
-                      >Buy Again</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </v-col>
+              <v-col
+                  v-for="(notif, index) in notifications"
+                  :key="index"
+                  cols="12"
+                  md="4"
+                  >
 
-              <v-col cols="12" sm="6" md="3">
-                <v-card class="text-center py-4 sidebar-bg" elevation="2">
-                  <v-img :src="fivegallons" height="150px" cover></v-img>
-                  <v-card-title>3 + 2 Gallons</v-card-title>
-                  <v-card-subtitle>₱65</v-card-subtitle>
-                  <v-card-actions>
-                    <v-btn
-                      color="white"
-                      style="background-color: brown"
-                      @click="(openDialog({ quantity: 3 + 2, price: 65 }), (dialog1 = true))"
-                      block
-                      >Buy Again</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </v-col>
+                  <v-card class="pa-4 sidebar-bg" elevation="2">
+                  <v-card-title class="text-subtitle-1 font-weight-bold">
+                        Order #{{ index + 1 }}
+                  </v-card-title>
+                    <v-card-text>
+                      <div><strong>Location:</strong> {{ notif.location }}</div>
+                      <div><strong>Quantity:</strong> {{ notif.quantity }} Gallon(s)</div>
+                      <div><strong>Total:</strong> ₱{{ notif.totalAmount.toFixed(2) }}</div>
+                      <div><strong>Time:</strong> {{ notif.time }}</div>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
 
-              <v-dialog v-model="dialog" width="400">
+                <v-dialog v-model="dialog1" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
                     <v-btn color="red" class="text-white" rounded="lg" width="100%" block>
-                      2 Gallons
+                      1 + 1 Gallons
                     </v-btn>
                   </v-card-title>
 
                   <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="address"
+                      label="Enter address to deliver"
                       outlined
                       dense
                       hide-details
                     ></v-text-field>
 
-                    <div class="mt-6">
-                      <div class="d-flex justify-space-between">
-                        <span class="font-weight-medium">Total</span>
-                        <span class="font-weight-bold">₱30.00</span>
-                      </div>
-
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
-                        Place Order
-                      </v-btn>
-                    </div>
-                  </v-card-text>
-                </v-card>
-              </v-dialog>
-
-              <v-dialog v-model="dialog1" width="400">
-                <v-card class="pa-6 rounded-xl" elevation="4">
-                  <v-card-title class="justify-center">
-                    <v-btn color="red" class="text-white" rounded="lg" width="100%" block>
-                      3 + 2 Gallons
-                    </v-btn>
-                  </v-card-title>
-
-                  <v-card-text>
                     <v-text-field
-                      v-model="location"
-                      label="Enter Location"
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
                       outlined
                       dense
                       hide-details
-                    ></v-text-field>
+                      ></v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
                         <span class="font-weight-medium">Total</span>
-                        <span class="font-weight-bold">₱60.00</span>
+                        <span class="font-weight-bold">₱25.00</span>
                       </div>
 
-                      <v-btn color="blue" class="text-white mt-4" block @click="placeOrder">
+                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
                         Place Order
                       </v-btn>
                     </div>

@@ -6,11 +6,13 @@ import { passwordValidator } from '@/utils/validators'
 const dialog = ref(false)
 const dialog1 = ref(false)
 const dialog2 = ref(false)
+const dialog3 = ref(false)
 
 const name = ref('')
 const pass = ref('')
 const confirm = ref('')
 const showSidebar = ref(false)
+const notifications = ref([])
 
 const fullName = ref('User')
 const avatarUrl = ref(null)
@@ -91,6 +93,74 @@ async function uploadAvatar(event) {
   }
   reader.readAsDataURL(file)
 }
+
+const totalOrders = ref(0)
+
+async function fetchTotalOrders() {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
+
+  if (userError) {
+    console.error('Error fetching user:', userError)
+    return
+  }
+
+  const fullNameValue = user.user_metadata.full_name || 'User'
+
+  const { data: orders, error: orderError } = await supabase
+    .from('orders')
+    .select('id')
+    .eq('full_name', fullNameValue)
+
+  if (orderError) {
+    console.error('Error fetching orders:', orderError)
+    return
+  }
+
+  totalOrders.value = orders.length
+}
+
+async function fetchOrders() {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
+
+  if (userError) {
+    console.error('Error fetching user:', userError)
+    return
+  }
+
+  fullName.value = user.user_metadata.full_name || 'User'
+  avatarUrl.value = user.user_metadata.avatar_url || null
+
+  const { data: orders, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('full_name', fullName.value) // or use a user_id if available
+    .order('created_at', { ascending: false })
+
+  if (orderError) {
+    console.error('Error fetching orders:', orderError)
+  } else {
+    notifications.value = orders.map((order) => ({
+      location: order.address,
+      quantity: order.quantity,
+      totalAmount: order.total_price,
+      time: new Date(order.created_at).toLocaleTimeString(),
+    }))
+  }
+}
+
+onMounted(() => {
+  fetchTotalOrders()
+  fetchOrders()
+  // Optional: Poll every 10 seconds for updates
+  setInterval(fetchOrders, 10000)
+})
+
 </script>
 
 <template>
@@ -133,7 +203,7 @@ async function uploadAvatar(event) {
                 style="background-color: white"
                 prepend-icon="mdi-history"
               >
-                Buy Again
+                History
               </v-list-item>
 
               <v-list-item
@@ -168,7 +238,15 @@ async function uploadAvatar(event) {
                   Profile
                 </h2>
                 <div class="d-flex align-center gap-2">
-                  <v-icon>mdi-bell</v-icon>
+                  <v-badge
+                    :content="notifications.length"
+                    color="red"
+                    v-if="notifications.length > 0"
+                  >
+                    <v-icon @click="dialog3 = true">mdi-bell</v-icon>
+                  </v-badge>
+                  <v-icon v-else @click="dialog3 = true">mdi-bell</v-icon>
+
                   <router-link to="/profile_dashboard">
                     <v-avatar size="40" style="background-color: orange">
                       <template v-if="avatarUrl">
@@ -236,22 +314,19 @@ async function uploadAvatar(event) {
                 </v-col>
 
                 <!-- Graph / Statistics Section -->
-                <v-col cols="12" md="8">
-                  <v-row>
-                    <v-col cols="4" class="text-center mt-10">
-                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">0</h4>
-                      <p class="text-caption d-flex justify-center">Total Purchase</p>
-                    </v-col>
-                    <v-col cols="4" class="text-center mt-10">
-                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">₱0</h4>
-                      <p class="text-caption d-flex justify-center">Money Saved</p>
-                    </v-col>
-                    <v-col cols="4" class="text-center mt-10">
-                      <h4 class="text-h5 font-weight-bold d-flex justify-center mt-10">0</h4>
-                      <p class="text-caption d-flex justify-center">Voucher Available</p>
-                    </v-col>
-                  </v-row>
-                </v-col>
+
+                 <v-row justify="center" align="center" class="mt-3">
+  <v-col
+    cols="4"
+    class="d-flex flex-column align-center justify-center text-center"
+  >
+    <h4 class="text-h5 font-weight-bold">
+      {{ totalOrders }}
+    </h4>
+    <p class="text-caption">Total Purchase</p>
+  </v-col>
+</v-row>
+
 
                 <v-dialog v-model="dialog" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
@@ -317,6 +392,35 @@ async function uploadAvatar(event) {
                     </v-card-title>
                   </v-card>
                 </v-dialog>
+
+                <v-dialog v-model="dialog3" width="400">
+                <v-card class="pa-6 rounded-xl" elevation="4">
+                  <v-card-title class="justify-center">
+                    <v-btn color="black" class="text-white" rounded="lg" width="100%" block>
+                      Notifications
+                    </v-btn>
+                  </v-card-title>
+
+                  <v-card-text>
+                    <div v-if="notifications.length === 0" class="text-center">
+                      <v-card-subtitle>No notifications yet.</v-card-subtitle>
+                    </div>
+
+                    <div v-else>
+                      <div v-for="(notif, index) in notifications" :key="index" class="mb-4">
+                        <v-card-subtitle>
+                          Order #{{ index + 1 }}<br />
+                          Location: {{ notif.location }}<br />
+                          Quantity: {{ notif.quantity }} Gallon(s)<br />
+                          Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
+                          Time: {{ notif.time }}
+                        </v-card-subtitle>
+                        <v-divider class="my-2"></v-divider>
+                      </div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
               </v-row>
             </v-card>
           </v-col>
