@@ -61,8 +61,9 @@ async function fetchOrders() {
   if (orderError) {
     console.error('Error fetching orders:', orderError)
   } else {
-    notifications.value = orders.map((order) => ({
-      location: order.address,
+    notifications.value = orders.reverse().map((order) => ({
+      address: order.address,
+      contact_number: order.contact_number,
       quantity: order.quantity,
       totalAmount: order.total_price,
       time: new Date(order.created_at).toLocaleTimeString(),
@@ -473,7 +474,8 @@ async function orderPlaced() {
                       <div v-for="(notif, index) in notifications" :key="index" class="mb-4">
                         <v-card-subtitle>
                           Order #{{ index + 1 }}<br />
-                          Location: {{ notif.location }}<br />
+                          Address: {{ notif.address }}<br />
+                          Contact Number: {{ notif.contact_number }}<br />
                           Quantity: {{ notif.quantity }} Gallon(s)<br />
                           Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
                           Time: {{ notif.time }}

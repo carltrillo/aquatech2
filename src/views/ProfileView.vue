@@ -146,7 +146,8 @@ async function fetchOrders() {
     console.error('Error fetching orders:', orderError)
   } else {
     notifications.value = orders.map((order) => ({
-      location: order.address,
+      address: order.address,
+      contact_number: order.contact_number,
       quantity: order.quantity,
       totalAmount: order.total_price,
       time: new Date(order.created_at).toLocaleTimeString(),
@@ -160,7 +161,6 @@ onMounted(() => {
   // Optional: Poll every 10 seconds for updates
   setInterval(fetchOrders, 10000)
 })
-
 </script>
 
 <template>
@@ -315,18 +315,17 @@ onMounted(() => {
 
                 <!-- Graph / Statistics Section -->
 
-                 <v-row justify="center" align="center" class="mt-3">
-  <v-col
-    cols="4"
-    class="d-flex flex-column align-center justify-center text-center"
-  >
-    <h4 class="text-h5 font-weight-bold">
-      {{ totalOrders }}
-    </h4>
-    <p class="text-caption">Total Purchase</p>
-  </v-col>
-</v-row>
-
+                <v-row justify="center" align="center" class="mt-3">
+                  <v-col
+                    cols="4"
+                    class="d-flex flex-column align-center justify-center text-center"
+                  >
+                    <h4 class="text-h5 font-weight-bold">
+                      {{ totalOrders }}
+                    </h4>
+                    <p class="text-caption">Total Purchase</p>
+                  </v-col>
+                </v-row>
 
                 <v-dialog v-model="dialog" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
@@ -394,33 +393,34 @@ onMounted(() => {
                 </v-dialog>
 
                 <v-dialog v-model="dialog3" width="400">
-                <v-card class="pa-6 rounded-xl" elevation="4">
-                  <v-card-title class="justify-center">
-                    <v-btn color="black" class="text-white" rounded="lg" width="100%" block>
-                      Notifications
-                    </v-btn>
-                  </v-card-title>
+                  <v-card class="pa-6 rounded-xl" elevation="4">
+                    <v-card-title class="justify-center">
+                      <v-btn color="black" class="text-white" rounded="lg" width="100%" block>
+                        Notifications
+                      </v-btn>
+                    </v-card-title>
 
-                  <v-card-text>
-                    <div v-if="notifications.length === 0" class="text-center">
-                      <v-card-subtitle>No notifications yet.</v-card-subtitle>
-                    </div>
-
-                    <div v-else>
-                      <div v-for="(notif, index) in notifications" :key="index" class="mb-4">
-                        <v-card-subtitle>
-                          Order #{{ index + 1 }}<br />
-                          Location: {{ notif.location }}<br />
-                          Quantity: {{ notif.quantity }} Gallon(s)<br />
-                          Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
-                          Time: {{ notif.time }}
-                        </v-card-subtitle>
-                        <v-divider class="my-2"></v-divider>
+                    <v-card-text>
+                      <div v-if="notifications.length === 0" class="text-center">
+                        <v-card-subtitle>No notifications yet.</v-card-subtitle>
                       </div>
-                    </div>
-                  </v-card-text>
-                </v-card>
-              </v-dialog>
+
+                      <div v-else>
+                        <div v-for="(notif, index) in notifications" :key="index" class="mb-4">
+                          <v-card-subtitle>
+                            Order #{{ index + 1 }}<br />
+                            Address: {{ notif.address }}<br />
+                            Contact Number: {{ notif.contact_number }} <br />
+                            Quantity: {{ notif.quantity }} Gallon(s)<br />
+                            Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
+                            Time: {{ notif.time }}
+                          </v-card-subtitle>
+                          <v-divider class="my-2"></v-divider>
+                        </div>
+                      </div>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
               </v-row>
             </v-card>
           </v-col>

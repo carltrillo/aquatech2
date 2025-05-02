@@ -44,8 +44,9 @@ async function fetchOrders() {
   if (orderError) {
     console.error('Error fetching orders:', orderError)
   } else {
-    notifications.value = orders.map((order) => ({
-      location: order.address,
+    notifications.value = orders.reverse().map((order) => ({
+      address: order.address,
+      contact_number: order.contact_number,
       quantity: order.quantity,
       totalAmount: order.total_price,
       time: new Date(order.created_at).toLocaleTimeString(),
@@ -100,7 +101,7 @@ onMounted(() => {
                 style="background-color: white"
                 prepend-icon="mdi-history"
               >
-              History
+                History
               </v-list-item>
 
               <v-list-item
@@ -167,27 +168,22 @@ onMounted(() => {
             </v-row>
             <v-divider class=""></v-divider>
             <v-row class="d-flex justify-center align-center mt-2">
-              <v-col
-                  v-for="(notif, index) in notifications"
-                  :key="index"
-                  cols="12"
-                  md="4"
-                  >
-
-                  <v-card class="pa-4 sidebar-bg" elevation="2">
+              <v-col v-for="(notif, index) in notifications" :key="index" cols="12" md="4">
+                <v-card class="pa-4 sidebar-bg" elevation="2">
                   <v-card-title class="text-subtitle-1 font-weight-bold">
-                        Order #{{ index + 1 }}
+                    Order #{{ index + 1 }}
                   </v-card-title>
-                    <v-card-text>
-                      <div><strong>Location:</strong> {{ notif.location }}</div>
-                      <div><strong>Quantity:</strong> {{ notif.quantity }} Gallon(s)</div>
-                      <div><strong>Total:</strong> ₱{{ notif.totalAmount.toFixed(2) }}</div>
-                      <div><strong>Time:</strong> {{ notif.time }}</div>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
+                  <v-card-text>
+                    <div><strong>Address:</strong> {{ notif.address }}</div>
+                    <div><strong>Contact Number:</strong> {{ notif.contact_number }}</div>
+                    <div><strong>Quantity:</strong> {{ notif.quantity }} Gallon(s)</div>
+                    <div><strong>Total:</strong> ₱{{ notif.totalAmount.toFixed(2) }}</div>
+                    <div><strong>Time:</strong> {{ notif.time }}</div>
+                  </v-card-text>
+                </v-card>
+              </v-col>
 
-                <v-dialog v-model="dialog1" width="400">
+              <v-dialog v-model="dialog1" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
                     <v-btn color="red" class="text-white" rounded="lg" width="100%" block>
@@ -211,7 +207,7 @@ onMounted(() => {
                       outlined
                       dense
                       hide-details
-                      ></v-text-field>
+                    ></v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
@@ -257,7 +253,8 @@ onMounted(() => {
                       <div v-for="(notif, index) in notifications" :key="index" class="mb-4">
                         <v-card-subtitle>
                           Order #{{ index + 1 }}<br />
-                          Location: {{ notif.location }}<br />
+                          Address: {{ notif.address }}<br />
+                          Contact Number: {{ notif.contact_number }} <br />
                           Quantity: {{ notif.quantity }} Gallon(s)<br />
                           Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
                           Time: {{ notif.time }}
