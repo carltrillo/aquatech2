@@ -2,6 +2,13 @@
 import { ref, computed, onMounted } from 'vue'
 import { supabase } from '@/utils/supabase.js' // adjust this path if needed
 import { passwordValidator } from '@/utils/validators'
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+
+function onClick() {
+  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
+}
 
 const dialog = ref(false)
 const dialog1 = ref(false)
@@ -167,22 +174,23 @@ onMounted(() => {
   <v-responsive>
     <v-slide-x-transition>
       <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
-        <v-row class="justify-center align-start" style="min-height: 100vh">
+        <v-row :theme="theme" class="justify-center align-start" style="min-height: 100vh">
           <!-- Sidebar (unchanged) -->
           <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
             <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
               <v-list-item
-                style="background-color: white"
                 prepend-icon="mdi-bottle-tonic"
+                style="color: #344cb7"
                 class="text-h4 special-gothic-expanded-one-regular"
               >
-                <a style="color: #344cb7" class="special-gothic-expanded-one-regular">Aqua</a>tech
+                <a style="color: #344cb7" class="special-gothic-expanded-one-regular">Aqua</a
+                ><a style="color: white" class="special-gothic-expanded-one-regular">tech</a>
               </v-list-item>
 
               <v-list-item
                 to="/customer_dashboard"
                 class="mt-4"
-                style="background-color: white"
+                style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-view-dashboard"
               >
                 Dashboard
@@ -191,7 +199,7 @@ onMounted(() => {
               <v-list-item
                 to="/promo_dashboard"
                 class="mt-2"
-                style="background-color: white"
+                style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-sale"
               >
                 Promos
@@ -200,7 +208,7 @@ onMounted(() => {
               <v-list-item
                 to="/history_dashboard"
                 class="mt-2"
-                style="background-color: white"
+                style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-history"
               >
                 History
@@ -209,17 +217,30 @@ onMounted(() => {
               <v-list-item
                 to="#"
                 class="mt-2"
-                style="background-color: white"
+                style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-account-circle"
               >
                 Profile
               </v-list-item>
 
               <v-list-item
-                style="background-color: white"
+                to="#"
+                class="mt-2"
+                style="background-color: white; color: #344cb7"
+                :prepend-icon="
+                  theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
+                "
+                @click="onClick"
+              >
+                Change Theme
+              </v-list-item>
+
+              <v-list-item
+                style="background-color: white; color: #344cb7"
                 class="mt-2"
                 prepend-icon="mdi-logout"
                 @click="dialog2 = true"
+                color="#344cb7"
               >
                 Sign out
               </v-list-item>

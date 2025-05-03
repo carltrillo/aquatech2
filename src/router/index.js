@@ -1,12 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { supabase } from '@/utils/supabase.js'
+
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+
 import PromoView from '@/views/PromoView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import CustomerView from '@/views/CustomerView.vue'
+
 import SignoutView from '@/views/SignoutView.vue'
-import { supabase } from '@/utils/supabase.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
