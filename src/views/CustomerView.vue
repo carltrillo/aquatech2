@@ -20,7 +20,6 @@ const dialog1 = ref(false)
 const dialog2 = ref(false)
 const dialog3 = ref(false)
 const dialog4 = ref(false)
-const dialog5 = ref(false)
 const dialog6 = ref(false)
 
 const fullName = ref('User')
@@ -32,7 +31,6 @@ const quantity = ref(0)
 const showSidebar = ref(false)
 
 const pricePerGallon = 15
-const totalPrice = computed(() => quantity.value * pricePerGallon)
 
 const notifications = ref([]) // <-- NEW: store order notifications
 const selectedProduct = ref({ quantity: 1, price: 15 }) // <-- NEW: to store selected product info
@@ -188,7 +186,7 @@ async function orderPlaced() {
                 style="background-color: white; color: #344cb7"
                 class="mt-2"
                 prepend-icon="mdi-logout"
-                @click="dialog2 = true"
+                @click="dialog4 = true"
                 color="#344cb7"
                 >
                 Sign out
@@ -479,57 +477,6 @@ async function orderPlaced() {
                       <v-btn color="blue" class="text-white" to="/logout" block> Sign Out </v-btn>
                     </div>
                   </v-card-title>
-                </v-card>
-              </v-dialog>
-
-              <v-dialog v-model="dialog5" width="400">
-                <v-card class="pa-6 rounded-xl" elevation="4">
-                  <v-card-title class="justify-center">
-                    <v-btn color="red" class="text-white" rounded="lg" width="100%" block>
-                      Custom Purchase
-                    </v-btn>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-text-field
-                      class="mb-3"
-                      v-model.number="quantity"
-                      label="Enter Amount of Gallons"
-                      type="number"
-                      outlined
-                      dense
-                      hide-details
-                      min="1"
-                    ></v-text-field>
-
-                    <v-text-field
-                      v-model="address"
-                      label="Enter address to deliver"
-                      outlined
-                      dense
-                      hide-details
-                    ></v-text-field>
-
-                    <v-text-field
-                      v-model="contactNum"
-                      label="Enter Contact Number"
-                      class="mt-2"
-                      outlined
-                      dense
-                      hide-details
-                    ></v-text-field>
-
-                    <div class="mt-6">
-                      <div class="d-flex justify-space-between">
-                        <span class="font-weight-medium">Total</span>
-                        <span class="font-weight-bold">₱{{ totalPrice.toFixed(2) }}</span>
-                      </div>
-
-                      <v-btn color="blue" class="text-white mt-4" block @click="orderPlaced">
-                        Place Order
-                      </v-btn>
-                    </div>
-                  </v-card-text>
                 </v-card>
               </v-dialog>
 

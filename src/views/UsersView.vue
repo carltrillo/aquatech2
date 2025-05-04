@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { supabase } from '@/utils/supabase'
+import { supabase } from '@/utils/supabase.js'
 import { useTheme } from 'vuetify'
 
 const theme = useTheme()
@@ -28,46 +28,36 @@ const initials = computed(() => {
 })
 
 // Fetch orders from Supabase
-async function fetchOrders() {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser()
-
-  if (userError) {
-    console.error('Error fetching user:', userError)
-    return
-  }
-
-  fullName.value = user.user_metadata.full_name || 'User'
-  avatarUrl.value = user.user_metadata.avatar_url || null
-
+async function fetchUsers() {
   try {
-    const { data: orders, error } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false })
+    const { data: orders, error } = await supabase.from('orders').select('full_name')
 
     if (error) throw error
 
-    notifications.value = orders.map((order) => ({
-      full_name: order.full_name,
-      address: order.address,
-      contact_number: order.contact_number,
-      quantity: order.quantity,
-      totalAmount: order.total_price,
-      time: new Date(order.created_at).toLocaleString(),
-    }))
+    // Use a Map to eliminate duplicates based on email (or full_name if email is not reliable)
+    const uniqueUsersMap = new Map()
+
+    orders.forEach((order) => {
+      if (!uniqueUsersMap.has(order.full_name)) {
+        uniqueUsersMap.set(order.full_name, {
+          full_name: order.full_name || 'Unnamed',
+          avatar_url: order.avatar_url || null,
+        })
+      }
+    })
+
+    // Convert the Map values to an array
+    notifications.value = Array.from(uniqueUsersMap.values())
   } catch (err) {
-    console.error('Error fetching all orders:', err.message)
+    console.error('Error fetching users from orders table:', err.message)
   }
 }
 
 onMounted(() => {
-  fetchOrders()
+  fetchUsers()
 
   // Optional: Poll every 10 seconds for updates
-  setInterval(fetchOrders, 10000)
+  setInterval(fetchUsers, 10000)
 })
 </script>
 
@@ -88,7 +78,7 @@ onMounted(() => {
               </v-list-item>
 
               <v-list-item
-                to="#"
+                to="/admin_dashboard"
                 class="mt-4"
                 style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-clipboard-list"
@@ -97,7 +87,7 @@ onMounted(() => {
               </v-list-item>
 
               <v-list-item
-                to="/users_dashboard"
+                to="#"
                 class="mt-2"
                 style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-account-group"
@@ -146,7 +136,7 @@ onMounted(() => {
                 </v-btn>
 
                 <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: #344cb7">
-                  All Orders
+                  All Users
                 </h2>
                 <div class="d-flex align-center gap-2">
                   <v-badge
@@ -185,15 +175,10 @@ onMounted(() => {
               <v-col v-for="(notif, index) in notifications" :key="index" cols="12" md="4">
                 <v-card class="pa-4 sidebar-bg" elevation="2">
                   <v-card-title class="text-subtitle-1 font-weight-bold">
-                    Order #{{ index + 1 }}
+                    User #{{ index + 1 }}
                   </v-card-title>
                   <v-card-text>
                     <div><strong>Full Name:</strong> {{ notif.full_name }}</div>
-                    <div><strong>Address:</strong> {{ notif.address }}</div>
-                    <div><strong>Contact Number:</strong> {{ notif.contact_number }}</div>
-                    <div><strong>Quantity:</strong> {{ notif.quantity }} Gallon(s)</div>
-                    <div><strong>Total:</strong> ₱{{ notif.totalAmount.toFixed(2) }}</div>
-                    <div><strong>Date & Time:</strong> {{ notif.time }}</div>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -227,13 +212,8 @@ onMounted(() => {
                     <div v-else>
                       <div v-for="(notif, index) in notifications" :key="index" class="mb-4">
                         <v-card-subtitle>
-                          Order #{{ index + 1 }}<br />
+                          User #{{ index + 1 }}<br />
                           Full Name: {{ notif.full_name }}<br />
-                          Address: {{ notif.address }}<br />
-                          Contact Number: {{ notif.contact_number }} <br />
-                          Quantity: {{ notif.quantity }} Gallon(s)<br />
-                          Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
-                          Date & Time: {{ notif.time }}
                         </v-card-subtitle>
                         <v-divider class="my-2"></v-divider>
                       </div>

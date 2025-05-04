@@ -10,6 +10,8 @@ import HistoryView from '@/views/HistoryView.vue'
 import CustomerView from '@/views/CustomerView.vue'
 
 import AdminView from '@/views/AdminView.vue'
+import UsersView from '@/views/UsersView.vue'
+import AdminProfile from '@/views/AdminProfile.vue'
 
 import SignoutView from '@/views/SignoutView.vue'
 
@@ -56,16 +58,25 @@ const router = createRouter({
       name: 'admin_dashboard',
       component: AdminView,
     },
+    {
+      path: '/users_dashboard',
+      name: 'users_dashboard',
+      component: UsersView,
+    },
+    {
+      path: '/admin_profile',
+      name: 'admin_profile',
+      component: AdminProfile,
+    },
   ],
 })
 
 // Route Guard Logic
 router.beforeEach(async (to, from, next) => {
-  if (to.name === 'logout') return next() // allow sign-out
+  if (to.name === 'logout') return next()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { data } = await supabase.auth.getUser()
+  const user = data?.user
 
   const authRoutes = ['login', 'register']
   const protectedRoutes = [
@@ -73,7 +84,12 @@ router.beforeEach(async (to, from, next) => {
     'profile_dashboard',
     'history_dashboard',
     'customer_dashboard',
+    'admin_dashboard',
+    'users_dashboard',
+    'admin_profile',
   ]
+
+  const adminRoutes = ['admin_dashboard', 'users_dashboard', 'admin_profile']
 
   // If logged in, prevent access to login/register
   if (user && authRoutes.includes(to.name)) {
@@ -85,7 +101,23 @@ router.beforeEach(async (to, from, next) => {
     return next('/')
   }
 
+  // Admin route check
+  if (user && adminRoutes.includes(to.name)) {
+    const { data: profile, error: profileErr } = await supabase
+      .from('users') // or 'admins', depending on your table
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+
+    if (profileErr || !profile?.is_admin) {
+      console.warn('Access denied: Not an admin')
+      return next('/customer_dashboard')
+    }
+  }
+
   return next()
 })
+
+
 
 export default router

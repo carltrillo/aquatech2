@@ -185,7 +185,7 @@ async function orderPlaced() {
                           style="background-color: white; color: #344cb7"
                           class="mt-2"
                           prepend-icon="mdi-logout"
-                          @click="dialog2 = true"
+                          @click="dialog4 = true"
                           color="#344cb7"
                         >
                           Sign out
