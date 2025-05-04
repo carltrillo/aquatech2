@@ -77,7 +77,7 @@ async function fetchOrders() {
       contact_number: order.contact_number,
       quantity: order.quantity,
       totalAmount: order.total_price,
-      time: new Date(order.created_at).toLocaleTimeString(),
+      time: new Date(order.created_at).toLocaleString(),
     }))
   }
 }
@@ -127,75 +127,74 @@ async function orderPlaced() {
       <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
         <v-row :theme="theme" class="justify-center align-start" style="min-height: 100vh">
           <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
-                                <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
-                                  <v-list-item
-                                    prepend-icon="mdi-bottle-tonic"
-                                    style="color: #344cb7"
-                                    class="text-h4 special-gothic-expanded-one-regular"
-                                  >
-                                    <a style="color: #344cb7" class="special-gothic-expanded-one-regular">Aqua</a
-                                    ><a style="color: white" class="special-gothic-expanded-one-regular">tech</a>
-                                  </v-list-item>
-                    
-                                  <v-list-item
-                                    to="#"
-                                    class="mt-4"
-                                    style="background-color: white; color: #344cb7"
-                                    prepend-icon="mdi-view-dashboard"
-                                  >
-                                    Dashboard
-                                  </v-list-item>
-                    
-                                  <v-list-item
-                                    to="promo_dashboard"
-                                    class="mt-2"
-                                    style="background-color: white; color: #344cb7"
-                                    prepend-icon="mdi-sale"
-                                  >
-                                    Promos
-                                  </v-list-item>
-                    
-                                  <v-list-item
-                                    to="/history_dashboard"
-                                    class="mt-2"
-                                    style="background-color: white; color: #344cb7"
-                                    prepend-icon="mdi-history"
-                                  >
-                                    History
-                                  </v-list-item>
-                    
-                                  <v-list-item
-                                    to="profile_dashboard"
-                                    class="mt-2"
-                                    style="background-color: white; color: #344cb7"
-                                    prepend-icon="mdi-account-circle"
-                                  >
-                                    Profile
-                                  </v-list-item>
-                    
-                                  <v-list-item
-                                    to="#"
-                                    class="mt-2"
-                                    style="background-color: white; color: #344cb7"
-                                    :prepend-icon="
-                                      theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
-                                    "
-                                    @click="onClick"
-                                  >
-                                    Change Theme
-                                  </v-list-item>
-                    
-                                  <v-list-item
-                                    style="background-color: white; color: #344cb7"
-                                    class="mt-2"
-                                    prepend-icon="mdi-logout"
-                                    @click="dialog2 = true"
-                                    color="#344cb7"
-                                  >
-                                    Sign out
-                                  </v-list-item>
-                                </v-list>
-                              </v-col>
+            <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
+              <v-list-item
+                prepend-icon="mdi-bottle-tonic"
+                style="color: #344cb7"
+                class="text-h4 special-gothic-expanded-one-regular"
+                >
+                <a style="color: #344cb7" class="special-gothic-expanded-one-regular">Aqua</a
+                ><a style="color: white" class="special-gothic-expanded-one-regular">tech</a>
+              </v-list-item>
+
+              <v-list-item
+                to="#"
+                class="mt-4"
+                style="background-color: white; color: #344cb7"
+                prepend-icon="mdi-view-dashboard"
+                >
+                Dashboard
+              </v-list-item>
+
+              <v-list-item
+                to="promo_dashboard"
+                class="mt-2"
+                style="background-color: white; color: #344cb7"
+                prepend-icon="mdi-sale"
+                >
+                Promos
+              </v-list-item>
+
+              <v-list-item
+                to="history_dashboard"
+                class="mt-2"
+                style="background-color: white; color: #344cb7"
+                prepend-icon="mdi-history"
+                >
+                History
+              </v-list-item>
+
+              <v-list-item
+                to="profile_dashboard"
+                class="mt-2"
+                style="background-color: white; color: #344cb7"
+                prepend-icon="mdi-account-circle"
+                >
+                Profile
+              </v-list-item>
+
+              <v-list-item
+                to="#"
+                class="mt-2"
+                style="background-color: white; color: #344cb7"
+                :prepend-icon="
+                theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+                @click="onClick"
+                >
+                Change Theme
+              </v-list-item>
+
+              <v-list-item
+                style="background-color: white; color: #344cb7"
+                class="mt-2"
+                prepend-icon="mdi-logout"
+                @click="dialog2 = true"
+                color="#344cb7"
+                >
+                Sign out
+              </v-list-item>
+          </v-list>
+        </v-col>
 
           <v-col cols="12" md="9">
             <v-row class="mb-4">
@@ -555,7 +554,7 @@ async function orderPlaced() {
                           Contact Number: {{ notif.contact_number }} <br />
                           Quantity: {{ notif.quantity }} Gallon(s)<br />
                           Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
-                          Time: {{ notif.time }}
+                          Date & Time: {{ notif.time }}
                         </v-card-subtitle>
                         <v-divider class="my-2"></v-divider>
                       </div>

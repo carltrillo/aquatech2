@@ -9,6 +9,8 @@ import ProfileView from '@/views/ProfileView.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import CustomerView from '@/views/CustomerView.vue'
 
+import AdminView from '@/views/AdminView.vue'
+
 import SignoutView from '@/views/SignoutView.vue'
 
 const router = createRouter({
@@ -49,10 +51,15 @@ const router = createRouter({
       name: 'logout',
       component: SignoutView,
     },
+    {
+      path: '/admin_dashboard',
+      name: 'admin_dashboard',
+      component: AdminView,
+    },
   ],
 })
 
-// ✅ Route Guard Logic
+// Route Guard Logic
 router.beforeEach(async (to, from, next) => {
   if (to.name === 'logout') return next() // allow sign-out
 

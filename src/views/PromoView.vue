@@ -73,7 +73,7 @@ async function fetchOrders() {
       contact_number: order.contact_number,
       quantity: order.quantity,
       totalAmount: order.total_price,
-      time: new Date(order.created_at).toLocaleTimeString(),
+      time: new Date(order.created_at).toLocaleString(),
     }))
   }
 }
@@ -363,13 +363,14 @@ async function orderPlaced() {
                     ></v-text-field>
 
                     <v-text-field
-                                          v-model="contactNum"
-                                          label="Enter Contact Number"
-                                          class="mt-2"
-                                          outlined
-                                          dense
-                                          hide-details
-                                        ></v-text-field>
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
+                      outlined
+                      dense
+                      hide-details
+                      >
+                    </v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
@@ -403,13 +404,14 @@ async function orderPlaced() {
                     ></v-text-field>
 
                     <v-text-field
-                                          v-model="contactNum"
-                                          label="Enter Contact Number"
-                                          class="mt-2"
-                                          outlined
-                                          dense
-                                          hide-details
-                                        ></v-text-field>
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
+                      outlined
+                      dense
+                      hide-details
+                      >
+                    </v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
@@ -440,16 +442,18 @@ async function orderPlaced() {
                       outlined
                       dense
                       hide-details
-                    ></v-text-field>
+                    >
+                  </v-text-field>
 
                     <v-text-field
-                                          v-model="contactNum"
-                                          label="Enter Contact Number"
-                                          class="mt-2"
-                                          outlined
-                                          dense
-                                          hide-details
-                                        ></v-text-field>
+                      v-model="contactNum"
+                      label="Enter Contact Number"
+                      class="mt-2"
+                      outlined
+                      dense
+                      hide-details
+                      >
+                    </v-text-field>
 
                     <div class="mt-6">
                       <div class="d-flex justify-space-between">
@@ -499,7 +503,7 @@ async function orderPlaced() {
                           Contact Number: {{ notif.contact_number }}<br />
                           Quantity: {{ notif.quantity }} Gallon(s)<br />
                           Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
-                          Time: {{ notif.time }}
+                          Date & Time: {{ notif.time }}
                         </v-card-subtitle>
                         <v-divider class="my-2"></v-divider>
                       </div>

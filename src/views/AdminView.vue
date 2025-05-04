@@ -42,22 +42,24 @@ async function fetchOrders() {
   fullName.value = user.user_metadata.full_name || 'User'
   avatarUrl.value = user.user_metadata.avatar_url || null
 
-  const { data: orders, error: orderError } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('full_name', fullName.value) // or use a user_id if available
-    .order('created_at', { ascending: false })
+  try {
+    const { data: orders, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false })
 
-  if (orderError) {
-    console.error('Error fetching orders:', orderError)
-  } else {
-    notifications.value = orders.reverse().map((order) => ({
+    if (error) throw error
+
+    notifications.value = orders.map((order) => ({
+      full_name: order.full_name,
       address: order.address,
       contact_number: order.contact_number,
       quantity: order.quantity,
       totalAmount: order.total_price,
       time: new Date(order.created_at).toLocaleString(),
     }))
+  } catch (err) {
+    console.error('Error fetching all orders:', err.message)
   }
 }
 
@@ -80,44 +82,35 @@ onMounted(() => {
                 prepend-icon="mdi-bottle-tonic"
                 style="color: #344cb7"
                 class="text-h4 special-gothic-expanded-one-regular"
-                >
+              >
                 <a style="color: #344cb7" class="special-gothic-expanded-one-regular">Aqua</a
                 ><a style="color: white" class="special-gothic-expanded-one-regular">tech</a>
               </v-list-item>
 
               <v-list-item
-                to="customer_dashboard"
+                to="#"
                 class="mt-4"
                 style="background-color: white; color: #344cb7"
-                prepend-icon="mdi-view-dashboard"
-                >
-                Dashboard
-              </v-list-item>
-
-              <v-list-item
-                to="promo_dashboard"
-                class="mt-2"
-                style="background-color: white; color: #344cb7"
-                prepend-icon="mdi-sale"
-                >
-                Promos
+                prepend-icon="mdi-clipboard-list"
+              >
+                All Orders
               </v-list-item>
 
               <v-list-item
                 to="#"
                 class="mt-2"
                 style="background-color: white; color: #344cb7"
-                prepend-icon="mdi-history"
-                >
-                History
+                prepend-icon="mdi-account-group"
+              >
+                All Users
               </v-list-item>
 
               <v-list-item
-                to="profile_dashboard"
+                to="#"
                 class="mt-2"
                 style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-account-circle"
-                >
+              >
                 Profile
               </v-list-item>
 
@@ -126,9 +119,10 @@ onMounted(() => {
                 class="mt-2"
                 style="background-color: white; color: #344cb7"
                 :prepend-icon="
-                theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+                  theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
+                "
                 @click="onClick"
-                >
+              >
                 Change Theme
               </v-list-item>
 
@@ -138,11 +132,11 @@ onMounted(() => {
                 prepend-icon="mdi-logout"
                 @click="dialog2 = true"
                 color="#344cb7"
-                >
+              >
                 Sign out
               </v-list-item>
-          </v-list>
-        </v-col>
+            </v-list>
+          </v-col>
 
           <v-col cols="12" md="9">
             <v-row class="mb-4">
@@ -152,7 +146,7 @@ onMounted(() => {
                 </v-btn>
 
                 <h2 class="text-h5 special-gothic-expanded-one-regular" style="color: #344cb7">
-                  History
+                  All Orders
                 </h2>
                 <div class="d-flex align-center gap-2">
                   <v-badge
@@ -194,6 +188,7 @@ onMounted(() => {
                     Order #{{ index + 1 }}
                   </v-card-title>
                   <v-card-text>
+                    <div><strong>Full Name:</strong> {{ notif.full_name }}</div>
                     <div><strong>Address:</strong> {{ notif.address }}</div>
                     <div><strong>Contact Number:</strong> {{ notif.contact_number }}</div>
                     <div><strong>Quantity:</strong> {{ notif.quantity }} Gallon(s)</div>
@@ -273,11 +268,12 @@ onMounted(() => {
                       <div v-for="(notif, index) in notifications" :key="index" class="mb-4">
                         <v-card-subtitle>
                           Order #{{ index + 1 }}<br />
+                          Full Name: {{ notif.full_name }}<br />
                           Address: {{ notif.address }}<br />
                           Contact Number: {{ notif.contact_number }} <br />
                           Quantity: {{ notif.quantity }} Gallon(s)<br />
                           Total: ₱{{ notif.totalAmount.toFixed(2) }}<br />
-                          Time: {{ notif.time }}
+                          Date & Time: {{ notif.time }}
                         </v-card-subtitle>
                         <v-divider class="my-2"></v-divider>
                       </div>
