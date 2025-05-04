@@ -94,11 +94,64 @@ async function uploadAvatar(event) {
   const file = event.target.files[0]
   if (!file) return
 
+  // 1. Show preview using FileReader
   const reader = new FileReader()
   reader.onload = () => {
     avatarUrl.value = reader.result
   }
   reader.readAsDataURL(file)
+
+  // 2. Upload to Supabase Storage
+  const fileExt = file.name.split('.').pop()
+  const filePath = `avatars/${Date.now()}.${fileExt}`
+
+  const { error: uploadError } = await supabase.storage
+    .from('avatars')
+    .upload(filePath, file)
+
+  if (uploadError) {
+    console.error('Upload failed:', uploadError.message)
+    return
+  }
+
+  // 3. Get public URL
+  const { data: publicUrlData } = supabase
+    .storage
+    .from('avatars')
+    .getPublicUrl(filePath)
+
+  if (!publicUrlData?.publicUrl) {
+    console.error('Failed to get public URL')
+    return
+  }
+
+  // 4. Save public URL to user metadata
+  const { error: updateUserError } = await supabase.auth.updateUser({
+    data: {
+      avatar_url: publicUrlData.publicUrl
+    }
+  })
+
+  if (updateUserError) {
+    console.error('Failed to update user metadata:', updateUserError.message)
+    return
+  }
+
+  // 5. Refetch user data to reflect new avatar
+  const {
+    data: { user },
+    error: refetchError
+  } = await supabase.auth.getUser()
+
+  if (refetchError) {
+    console.error('Error refetching user:', refetchError.message)
+    return
+  }
+
+  avatarUrl.value = user.user_metadata.avatar_url || null
+  fullName.value = user.user_metadata.full_name || 'User'
+
+  console.log('Avatar uploaded, profile updated, and UI refreshed')
 }
 
 const totalOrders = ref(0)
