@@ -1,14 +1,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { supabase } from '@/utils/supabase.js' // adjust this path if needed
+import { supabase } from '@/utils/supabase.js'
 import { passwordValidator } from '@/utils/validators'
 import { useTheme } from 'vuetify'
 
 const theme = useTheme()
-
-function onClick() {
-  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
-}
 
 const dialog = ref(false)
 const dialog1 = ref(false)
@@ -23,6 +19,12 @@ const notifications = ref([])
 
 const fullName = ref('User')
 const avatarUrl = ref(null)
+
+const totalOrders = ref(0)
+
+function onClick() {
+  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
+}
 
 const initials = computed(() => {
   return fullName.value
@@ -154,8 +156,6 @@ async function uploadAvatar(event) {
   console.log('Avatar uploaded, profile updated, and UI refreshed')
 }
 
-const totalOrders = ref(0)
-
 async function fetchTotalOrders() {
   const {
     data: { user },
@@ -205,7 +205,7 @@ async function fetchOrders() {
   if (orderError) {
     console.error('Error fetching orders:', orderError)
   } else {
-    notifications.value = orders.map((order) => ({
+    notifications.value = orders.reverse().map((order) => ({
       address: order.address,
       contact_number: order.contact_number,
       quantity: order.quantity,
@@ -228,7 +228,8 @@ onMounted(() => {
     <v-slide-x-transition>
       <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
         <v-row :theme="theme" class="justify-center align-start" style="min-height: 100vh">
-          <!-- Sidebar (unchanged) -->
+
+          <!-- Sidebar -->
           <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
             <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
               <v-list-item
@@ -387,8 +388,7 @@ onMounted(() => {
                   </div>
                 </v-col>
 
-                <!-- Graph / Statistics Section -->
-
+                <!-- Order total and profile section -->
                 <v-row justify="center" align="center" class="mt-3">
                   <v-col
                     cols="4"
@@ -401,6 +401,7 @@ onMounted(() => {
                   </v-col>
                 </v-row>
 
+                 <!-- Name edit -->
                 <v-dialog v-model="dialog" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
                     <v-card-title class="justify-center">
@@ -427,6 +428,7 @@ onMounted(() => {
                   </v-card>
                 </v-dialog>
 
+                 <!-- Password edit -->
                 <v-dialog v-model="dialog1" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
                     <v-card-title class="justify-center">
@@ -453,6 +455,7 @@ onMounted(() => {
                   </v-card>
                 </v-dialog>
 
+                <!-- Signout dialog -->
                 <v-dialog v-model="dialog2" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
                     <v-card-title>
@@ -466,6 +469,7 @@ onMounted(() => {
                   </v-card>
                 </v-dialog>
 
+                <!-- Notifications dialog -->
                 <v-dialog v-model="dialog3" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
                     <v-card-title class="justify-center">
@@ -495,6 +499,7 @@ onMounted(() => {
                     </v-card-text>
                   </v-card>
                 </v-dialog>
+
               </v-row>
             </v-card>
           </v-col>

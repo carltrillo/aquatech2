@@ -5,10 +5,6 @@ import { useTheme } from 'vuetify'
 
 const theme = useTheme()
 
-function onClick() {
-  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
-}
-
 const confirm = ref('')
 
 const dialog = ref(false)
@@ -19,6 +15,10 @@ const avatarUrl = ref(null)
 const notifications = ref([])
 const showSidebar = ref(false)
 
+function onClick() {
+  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
+}
+
 const initials = computed(() => {
   return fullName.value
     .split(' ')
@@ -27,7 +27,6 @@ const initials = computed(() => {
     .toUpperCase()
 })
 
-// Fetch orders from Supabase
 async function fetchUsers() {
   try {
     const { data: orders, error } = await supabase.from('orders').select('full_name')
@@ -66,6 +65,8 @@ onMounted(() => {
     <v-slide-x-transition>
       <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
         <v-row :theme="theme" class="justify-center align-start" style="min-height: 100vh">
+
+          <!-- Sidebar -->
           <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
             <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
               <v-list-item
@@ -128,6 +129,7 @@ onMounted(() => {
             </v-list>
           </v-col>
 
+          <!-- Main content -->
           <v-col cols="12" md="9">
             <v-row class="mb-4">
               <v-col cols="12" class="d-flex justify-space-between align-center">
@@ -183,6 +185,7 @@ onMounted(() => {
                 </v-card>
               </v-col>
 
+              <!-- Signout dialog -->
               <v-dialog v-model="dialog" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title>
@@ -196,6 +199,7 @@ onMounted(() => {
                 </v-card>
               </v-dialog>
 
+              <!-- notifications dialog -->
               <v-dialog v-model="dialog1" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
@@ -221,6 +225,7 @@ onMounted(() => {
                   </v-card-text>
                 </v-card>
               </v-dialog>
+              
             </v-row>
           </v-col>
         </v-row>

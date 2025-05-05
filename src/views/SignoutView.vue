@@ -1,4 +1,3 @@
-<!-- SignOutView.vue -->
 <script setup>
 import { supabase } from '@/utils/supabase.js'
 import { onMounted } from 'vue'

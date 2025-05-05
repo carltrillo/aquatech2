@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from 'vue'
-import aqlogo from '@/assets/aqlogo.jpg'
 import { supabase } from '@/utils/supabase.js'
 import { useRouter } from 'vue-router'
 import { emailValidator, passwordValidator } from '@/utils/validators.js'
+import aqlogo from '@/assets/aqlogo.jpg'
 
 const router = useRouter()
 
@@ -87,6 +87,7 @@ const loginWithGithub = async () => {
     <v-container class="fill-height d-flex justify-center align-center pa-4 login-bg" fluid>
       <v-row class="justify-center align-center" style="min-height: 100vh">
         <v-col cols="12" sm="10" md="6" lg="4">
+          
           <!-- Logo and Title -->
           <div class="text-center mb-6 rounded-x2">
             <v-img

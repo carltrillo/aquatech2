@@ -9,10 +9,6 @@ import { useTheme } from 'vuetify'
 
 const theme = useTheme()
 
-function onClick() {
-  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
-}
-
 const confirm = ref('')
 const dialog = ref(false)
 const dialog1 = ref(false)
@@ -30,8 +26,12 @@ const quantity = ref(1)
 const pricePerGallon = 15
 const showSidebar = ref(false)
 
-const notifications = ref([]) // <-- NEW: store order notifications
-const selectedProduct = ref({ quantity: 1, price: 15 }) // <-- NEW: to store selected product info
+const notifications = ref([])
+const selectedProduct = ref({ quantity: 1, price: 15 })
+
+function onClick() {
+  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
+}
 
 function openDialog(product) {
   selectedProduct.value = product
@@ -122,6 +122,8 @@ async function orderPlaced() {
     <v-slide-x-transition>
       <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
         <v-row :theme="theme" class="justify-center align-start" style="min-height: 100vh">
+
+          <!-- Sidebar -->
           <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
                       <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
                         <v-list-item
@@ -132,7 +134,7 @@ async function orderPlaced() {
                           <a style="color: #344cb7" class="special-gothic-expanded-one-regular">Aqua</a
                           ><a style="color: white" class="special-gothic-expanded-one-regular">tech</a>
                         </v-list-item>
-          
+
                         <v-list-item
                           to="/customer_dashboard"
                           class="mt-4"
@@ -141,7 +143,7 @@ async function orderPlaced() {
                         >
                           Dashboard
                         </v-list-item>
-          
+
                         <v-list-item
                           to="#"
                           class="mt-2"
@@ -150,7 +152,7 @@ async function orderPlaced() {
                         >
                           Promos
                         </v-list-item>
-          
+
                         <v-list-item
                           to="/history_dashboard"
                           class="mt-2"
@@ -159,7 +161,7 @@ async function orderPlaced() {
                         >
                           History
                         </v-list-item>
-          
+
                         <v-list-item
                           to="profile_dashboard"
                           class="mt-2"
@@ -168,7 +170,7 @@ async function orderPlaced() {
                         >
                           Profile
                         </v-list-item>
-          
+
                         <v-list-item
                           to="#"
                           class="mt-2"
@@ -180,7 +182,7 @@ async function orderPlaced() {
                         >
                           Change Theme
                         </v-list-item>
-          
+
                         <v-list-item
                           style="background-color: white; color: #344cb7"
                           class="mt-2"
@@ -193,6 +195,7 @@ async function orderPlaced() {
                       </v-list>
                     </v-col>
 
+          <!-- Main content -->
           <v-col cols="12" md="9">
             <v-row class="mb-4">
               <v-col cols="12" class="d-flex justify-space-between align-center">
@@ -305,6 +308,7 @@ async function orderPlaced() {
                 </v-card>
               </v-col>
 
+              <!-- 1+1 gallons dialog -->
               <v-dialog v-model="dialog" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
@@ -345,6 +349,7 @@ async function orderPlaced() {
                 </v-card>
               </v-dialog>
 
+               <!-- 2+1 gallons dialog -->
               <v-dialog v-model="dialog1" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
@@ -386,6 +391,7 @@ async function orderPlaced() {
                 </v-card>
               </v-dialog>
 
+              <!-- 2+2 gallons dialog -->
               <v-dialog v-model="dialog2" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
@@ -427,6 +433,7 @@ async function orderPlaced() {
                 </v-card>
               </v-dialog>
 
+              <!-- 3+2 gallons dialog -->
               <v-dialog v-model="dialog3" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
@@ -469,6 +476,7 @@ async function orderPlaced() {
                 </v-card>
               </v-dialog>
 
+              <!-- Signout dialog -->
               <v-dialog v-model="dialog4" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title>
@@ -482,6 +490,7 @@ async function orderPlaced() {
                 </v-card>
               </v-dialog>
 
+              <!-- notifications dialog -->
               <v-dialog v-model="dialog5" width="400">
                 <v-card class="pa-6 rounded-xl" elevation="4">
                   <v-card-title class="justify-center">
@@ -511,6 +520,7 @@ async function orderPlaced() {
                   </v-card-text>
                 </v-card>
               </v-dialog>
+              
             </v-row>
           </v-col>
         </v-row>

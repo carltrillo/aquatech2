@@ -1,14 +1,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { supabase } from '@/utils/supabase.js' // adjust this path if needed
+import { supabase } from '@/utils/supabase.js'
 import { passwordValidator } from '@/utils/validators'
 import { useTheme } from 'vuetify'
 
 const theme = useTheme()
-
-function onClick() {
-  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
-}
 
 const dialog = ref(false)
 const dialog1 = ref(false)
@@ -23,6 +19,10 @@ const notifications = ref([])
 
 const fullName = ref('User')
 const avatarUrl = ref(null)
+
+function onClick() {
+  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
+}
 
 const initials = computed(() => {
   return fullName.value
@@ -139,6 +139,7 @@ onMounted(() => {
     <v-slide-x-transition>
       <v-container class="fill-height d-flex justify-center align-center pa-4" fluid>
         <v-row :theme="theme" class="justify-center align-start" style="min-height: 100vh">
+
           <!-- Sidebar (unchanged) -->
           <v-col v-show="showSidebar || $vuetify.display.lgAndUp">
             <v-list style="max-width: 328px" class="sidebar-border sidebar-bg" nav dense fluid>
@@ -245,6 +246,7 @@ onMounted(() => {
                 </div>
               </v-col>
             </v-row>
+
             <v-divider class=""></v-divider>
             <!-- Profile Dashboard Starts Here -->
             <v-card class="rounded-xl pa-6 mt-5 sidebar-bg" elevation="2">
@@ -289,6 +291,7 @@ onMounted(() => {
                   </div>
                 </v-col>
 
+                <!-- Name Edit -->
                 <v-dialog v-model="dialog" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
                     <v-card-title class="justify-center">
@@ -315,6 +318,7 @@ onMounted(() => {
                   </v-card>
                 </v-dialog>
 
+                <!-- Password Edit -->
                 <v-dialog v-model="dialog1" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
                     <v-card-title class="justify-center">
@@ -341,6 +345,7 @@ onMounted(() => {
                   </v-card>
                 </v-dialog>
 
+                <!-- Signout Dialog -->
                 <v-dialog v-model="dialog2" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
                     <v-card-title>
@@ -354,6 +359,7 @@ onMounted(() => {
                   </v-card>
                 </v-dialog>
 
+                <!-- Notifications dialog -->
                 <v-dialog v-model="dialog3" width="400">
                   <v-card class="pa-6 rounded-xl" elevation="4">
                     <v-card-title class="justify-center">
@@ -379,6 +385,7 @@ onMounted(() => {
                     </v-card-text>
                   </v-card>
                 </v-dialog>
+
               </v-row>
             </v-card>
           </v-col>
