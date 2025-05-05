@@ -163,7 +163,7 @@ async function orderPlaced() {
                         </v-list-item>
 
                         <v-list-item
-                          to="profile_dashboard"
+                          to="/profile_dashboard"
                           class="mt-2"
                           style="background-color: white; color: #344cb7"
                           prepend-icon="mdi-account-circle"
@@ -520,7 +520,7 @@ async function orderPlaced() {
                   </v-card-text>
                 </v-card>
               </v-dialog>
-              
+
             </v-row>
           </v-col>
         </v-row>

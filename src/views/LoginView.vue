@@ -87,7 +87,6 @@ const loginWithGithub = async () => {
     <v-container class="fill-height d-flex justify-center align-center pa-4 login-bg" fluid>
       <v-row class="justify-center align-center" style="min-height: 100vh">
         <v-col cols="12" sm="10" md="6" lg="4">
-          
           <!-- Logo and Title -->
           <div class="text-center mb-6 rounded-x2">
             <v-img
@@ -142,20 +141,14 @@ const loginWithGithub = async () => {
               </v-btn>
             </v-form>
 
-            <v-btn
-                color="white"
-                block
-                class="mb-3 text-black"
-                height="48"
-                @click="loginWithGoogle"
-              >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Google-g-icon.png"
-                  alt="Google Logo"
-                  style="width: 30px; height: 30px; margin-right: 10px"
-                />
-                Login with Google
-              </v-btn>
+            <v-btn color="white" block class="mb-3 text-black" height="48" @click="loginWithGoogle">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Google-g-icon.png"
+                alt="Google Logo"
+                style="width: 30px; height: 30px; margin-right: 10px"
+              />
+              Login with Google
+            </v-btn>
 
             <v-btn color="white" block class="mb-3 text-black" height="48" @click="loginWithGithub">
               <img

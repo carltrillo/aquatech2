@@ -87,7 +87,7 @@ onMounted(() => {
               </v-list-item>
 
               <v-list-item
-                to="customer_dashboard"
+                to="/customer_dashboard"
                 class="mt-4"
                 style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-view-dashboard"
@@ -96,7 +96,7 @@ onMounted(() => {
               </v-list-item>
 
               <v-list-item
-                to="promo_dashboard"
+                to="/promo_dashboard"
                 class="mt-2"
                 style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-sale"
@@ -114,7 +114,7 @@ onMounted(() => {
               </v-list-item>
 
               <v-list-item
-                to="profile_dashboard"
+                to="/profile_dashboard"
                 class="mt-2"
                 style="background-color: white; color: #344cb7"
                 prepend-icon="mdi-account-circle"
@@ -249,7 +249,7 @@ onMounted(() => {
                   </v-card-text>
                 </v-card>
               </v-dialog>
-              
+
             </v-row>
           </v-col>
         </v-row>
