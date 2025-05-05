@@ -76,6 +76,28 @@ const register = async () => {
     router.replace('/customer_dashboard')
   }
 }
+
+const loginWithGoogle = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+  })
+
+  if (error) {
+    console.error('Google Login Error:', error.message)
+    alert(`Google login failed: ${error.message}`)
+  }
+}
+
+const loginWithGithub = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+  })
+
+  if (error) {
+    console.error('GitHub Login Error:', error.message)
+    alert(`GitHub login failed: ${error.message}`)
+  }
+}
 </script>
 
 <template>
@@ -148,11 +170,26 @@ const register = async () => {
                 @click="loginWithGoogle"
               >
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
-                  alt="Facebook Logo"
+                  src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Google-g-icon.png"
+                  alt="Google Logo"
                   style="width: 30px; height: 30px; margin-right: 10px"
                 />
-                Login with Facebook
+                Login with Google
+              </v-btn>
+
+              <v-btn
+                color="white"
+                block
+                class="mb-3 text-black"
+                height="48"
+                @click="loginWithGithub"
+              >
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/c/c2/GitHub_Invertocat_Logo.svg"
+                  alt="Github Logo"
+                  style="width: 30px; height: 30px; margin-right: 10px"
+                />
+                Login with GitHub
               </v-btn>
             </v-form>
           </v-card>
